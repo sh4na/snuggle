@@ -12,8 +12,6 @@ namespace Snuggle
 	[Activity (Label = "Snuggle", MainLauncher = true)]
 	public class Activity1 : Activity
 	{
-		int count = 1;
-
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
@@ -21,15 +19,24 @@ namespace Snuggle
 			// Set our view from the "main" layout resource
 			SetContentView (Resource.Layout.Main);
 
-			// Get our button from the layout resource,
-			// and attach an event to it
-			Button button = FindViewById<Button> (Resource.Id.myButton);
-			
-			button.Click += delegate {
-				button.Text = string.Format ("{0} clicks!", count++);
+			// TABS!
+			this.ActionBar.NavigationMode = ActionBarNavigationMode.Tabs;
+			AddTabbedFragment<StreamFragment> ("Stream");
+			AddTabbedFragment<MessagesFragment> ("Messages");
+			AddTabbedFragment<PhotosFragment> ("Photos");
+		}
+
+		private void AddTabbedFragment<T> (string tabName) where T : Fragment, new ()
+		{
+			var tab = this.ActionBar.NewTab ();
+			tab.SetText (tabName);
+
+			// must set event handler before adding tab
+			tab.TabSelected += delegate(object sender, ActionBar.TabEventArgs e) {
+				e.FragmentTransaction.Replace (Resource.Id.FragmentContainer, new T ());
 			};
+			
+			this.ActionBar.AddTab (tab);
 		}
 	}
 }
-
-
