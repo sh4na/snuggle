@@ -9,6 +9,8 @@ namespace Snuggle
 {
 	public partial class MessagesViewController : UIViewController
 	{
+		List<MessageTableViewItemGroup> tableItems;
+
 		static bool UserInterfaceIdiomIsPhone {
 			get { return UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone; }
 		}
@@ -59,14 +61,18 @@ namespace Snuggle
 		public override void ViewWillAppear (bool animated)
 		{
 			base.ViewWillAppear (animated);
-			var items = new List<MessageTableViewItem> ();
-			items.Add (new MessageTableViewItem () { Message = "12334 567890 123345 678901 233456 7890" });
-			items.Add (new MessageTableViewItem () { Message = "message 2" });
-			items.Add (new MessageTableViewItem () { Message = "message 3" });
-			List<MessageTableViewItemGroup> tableItems = new List<MessageTableViewItemGroup> ();
-			tableItems.Add (new MessageTableViewItemGroup () { Items = items } );
 
-			this.tblMessages.Source = new MessageTableSource (tableItems);
+			if (tableItems == null)
+			{
+				tableItems = new List<MessageTableViewItemGroup> ();
+				var items = new List<MessageTableViewItem> ();
+				items.Add (new MessageTableViewItem () { Message = "12334 567890 123345 678901 233456 7890" });
+				items.Add (new MessageTableViewItem () { Message = "message 2" });
+				items.Add (new MessageTableViewItem () { Message = "message 3" });
+
+				tableItems.Add (new MessageTableViewItemGroup () { Items = items } );
+				this.tblMessages.Source = new MessageTableSource (tableItems);
+			}
 		}
 
 		public override void ViewDidAppear (bool animated)

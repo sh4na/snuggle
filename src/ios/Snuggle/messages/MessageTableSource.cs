@@ -20,10 +20,10 @@ namespace Snuggle
 
 		public List<MessageTableViewItem> Items
 		{
-			get { return this._items; }
-			set { this._items = value; }
+			get { return items; }
+			set { items = value; }
 		}
-		protected List<MessageTableViewItem> _items = new List<MessageTableViewItem>();
+		List<MessageTableViewItem> items = new List<MessageTableViewItem>();
 	}
 
 	//========================================================================
@@ -33,14 +33,13 @@ namespace Snuggle
 	public class MessageTableSource : UITableViewSource
 	{
 		//---- declare vars
-		protected List<MessageTableViewItemGroup> _tableItems;
-		protected string _customCellIdentifier = "MessageViewCell";
-		protected Dictionary<int, MessageViewCell> _cellControllers =
-		new Dictionary<int, MessageViewCell>();
+		protected List<MessageTableViewItemGroup> tableItems;
+		protected string customCellIdentifier = "MessageViewCell";
+		protected Dictionary<int, MessageViewCell> cellControllers = new Dictionary<int, MessageViewCell>();
 
 		public MessageTableSource (List<MessageTableViewItemGroup> items)
 		{
-			this._tableItems = items;
+			tableItems = items;
 		}
 
 		/// <summary>
@@ -48,7 +47,7 @@ namespace Snuggle
 		/// </summary>
 		public override int NumberOfSections (UITableView tableView)
 		{
-			return this._tableItems.Count;
+			return tableItems.Count;
 		}
 
 		/// <summary>
@@ -56,7 +55,7 @@ namespace Snuggle
 		/// </summary>
 		public override int RowsInSection (UITableView tableview, int section)
 		{
-			return this._tableItems[section].Items.Count;
+			return tableItems[section].Items.Count;
 		}
 
 		/// <summary>
@@ -64,7 +63,7 @@ namespace Snuggle
 		/// </summary>
 		public override string TitleForHeader (UITableView tableView, int section)
 		{
-			return this._tableItems[section].Name;
+			return tableItems[section].Name;
 		}
 
 		/// <summary>
@@ -72,7 +71,7 @@ namespace Snuggle
 		/// </summary>
 		public override string TitleForFooter (UITableView tableView, int section)
 		{
-			return this._tableItems[section].Footer;
+			return tableItems[section].Footer;
 		}
 
 		/// <summary>
@@ -80,7 +79,7 @@ namespace Snuggle
 		/// </summary>
 		public override float GetHeightForRow (UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
 		{
-			MessageTableViewItem item = this._tableItems[indexPath.Section].Items[indexPath.Row];
+			MessageTableViewItem item = tableItems[indexPath.Section].Items[indexPath.Row];
 			return (float) (44 * (Math.Ceiling((double)item.Message.Length / 22)));
 		}
 
@@ -90,14 +89,14 @@ namespace Snuggle
 		public override UITableViewCell GetCell (UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
 		{
 			//---- declare vars
-			UITableViewCell cell = tableView.DequeueReusableCell (this._customCellIdentifier);
+			UITableViewCell cell = tableView.DequeueReusableCell (customCellIdentifier);
 			MessageViewCell customCellController = null;
 
 			//---- if there are no cells to reuse, create a new one
 			if (cell == null)
 			{
 				var id = Environment.TickCount;
-				while (_cellControllers.ContainsKey (id))
+				while (cellControllers.ContainsKey (id))
 					id = Environment.TickCount;
 				customCellController = new MessageViewCell ();
 				// retreive the cell from our custom cell controller
@@ -105,16 +104,16 @@ namespace Snuggle
 				// give the cell a unique ID, so we can match it up to the controller
 				cell.Tag = id;
 				// store our controller with the unique ID we gave our cell
-				this._cellControllers.Add (cell.Tag, customCellController);
+				cellControllers.Add (cell.Tag, customCellController);
 			}
-			else
-			{
-				// retreive our controller via it's unique ID
-				customCellController = this._cellControllers[cell.Tag];
-			}
+			else if (!cellControllers.ContainsKey(cell.Tag))
+				cellControllers.Add (cell.Tag, customCellController);
+
+			// retreive our controller via it's unique ID
+			customCellController = cellControllers[cell.Tag];
 
 			//---- create a shortcut to our item
-			MessageTableViewItem item = this._tableItems[indexPath.Section].Items[indexPath.Row];
+			MessageTableViewItem item = tableItems[indexPath.Section].Items[indexPath.Row];
 
 			//---- set our cell properties
 			customCellController.Message = item.Message;
