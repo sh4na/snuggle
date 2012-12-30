@@ -1,7 +1,7 @@
 
 using System;
 using System.Drawing;
-
+using System.Collections.Generic;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
@@ -54,6 +54,24 @@ namespace Snuggle
 			} else {
 				return true;
 			}
+		}
+
+		public override void ViewWillAppear (bool animated)
+		{
+			base.ViewWillAppear (animated);
+			var items = new List<MessageTableViewItem> ();
+			items.Add (new MessageTableViewItem () { Message = "12334 567890 123345 678901 233456 7890" });
+			items.Add (new MessageTableViewItem () { Message = "message 2" });
+			items.Add (new MessageTableViewItem () { Message = "message 3" });
+			List<MessageTableViewItemGroup> tableItems = new List<MessageTableViewItemGroup> ();
+			tableItems.Add (new MessageTableViewItemGroup () { Items = items } );
+
+			this.tblMessages.Source = new MessageTableSource (tableItems);
+		}
+
+		public override void ViewDidAppear (bool animated)
+		{
+			base.ViewDidAppear (animated);
 		}
 	}
 }

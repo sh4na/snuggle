@@ -99,6 +99,11 @@
     <Compile Include="PhotosViewController.designer.cs">
       <DependentUpon>PhotosViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="messages\MessageViewCell.cs" />
+    <Compile Include="messages\MessageViewCell.designer.cs">
+      <DependentUpon>MessageViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="messages\MessageTableSource.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -114,5 +119,9 @@
     <InterfaceDefinition Include="MessagesViewController_iPad.xib" />
     <InterfaceDefinition Include="PhotosViewController_iPhone.xib" />
     <InterfaceDefinition Include="PhotosViewController_iPad.xib" />
+    <InterfaceDefinition Include="messages\MessageViewCell_iPad.xib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="messages\" />
   </ItemGroup>
 </Project>
