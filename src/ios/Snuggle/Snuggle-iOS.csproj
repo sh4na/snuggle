@@ -87,6 +87,18 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="StreamViewController.cs" />
+    <Compile Include="StreamViewController.designer.cs">
+      <DependentUpon>StreamViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MessagesViewController.cs" />
+    <Compile Include="MessagesViewController.designer.cs">
+      <DependentUpon>MessagesViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PhotosViewController.cs" />
+    <Compile Include="PhotosViewController.designer.cs">
+      <DependentUpon>PhotosViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -94,5 +106,13 @@
       <Project>{AD467BAD-60B0-4787-894D-E4D3FB409430}</Project>
       <Name>iOSCommon</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <InterfaceDefinition Include="StreamViewController_iPhone.xib" />
+    <InterfaceDefinition Include="StreamViewController_iPad.xib" />
+    <InterfaceDefinition Include="MessagesViewController_iPhone.xib" />
+    <InterfaceDefinition Include="MessagesViewController_iPad.xib" />
+    <InterfaceDefinition Include="PhotosViewController_iPhone.xib" />
+    <InterfaceDefinition Include="PhotosViewController_iPad.xib" />
   </ItemGroup>
 </Project>
