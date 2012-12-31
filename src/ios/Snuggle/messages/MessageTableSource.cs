@@ -80,6 +80,8 @@ namespace Snuggle
 		public override float GetHeightForRow (UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
 		{
 			MessageTableViewItem item = tableItems[indexPath.Section].Items[indexPath.Row];
+			if (item == null || item.Message == null)
+				return 44;
 			return (float) (44 * (Math.Ceiling((double)item.Message.Length / 22)));
 		}
 

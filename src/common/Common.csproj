@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{254CC6D1-E305-4328-96DA-342F95DE2937}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Common</RootNamespace>
-    <AssemblyName>Common</AssemblyName>
+    <RootNamespace>Snuggle.Common</RootNamespace>
+    <AssemblyName>Snuggle.Common</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -31,9 +31,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="xmpp">
+      <HintPath>..\..\libs\xmpp.dll</HintPath>
+    </Reference>
+    <Reference Include="zlib.net">
+      <HintPath>..\..\libs\zlib.net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Profile.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="Service.cs" />
+    <Compile Include="XmppService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

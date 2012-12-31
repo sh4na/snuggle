@@ -13,6 +13,10 @@ namespace Snuggle
 	[Register ("AppDelegate")]
 	public partial class AppDelegate : UIApplicationDelegate
 	{
+		static bool UserInterfaceIdiomIsPhone {
+			get { return UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone; }
+		}
+	
 		// class-level declarations
 		UIWindow window;
 		UITabBarController tabBarController;
@@ -36,6 +40,7 @@ namespace Snuggle
 				new StreamViewController (),
 				new MessagesViewController (),
 				new PhotosViewController (),
+				GetSettingsController ()
 			};
 			window.RootViewController = tabBarController;
 
@@ -43,6 +48,27 @@ namespace Snuggle
 			window.MakeKeyAndVisible ();
 			
 			return true;
+		}
+
+		public UIViewController GetSettingsController ()
+		{
+			var master = new SettingsListController ();
+
+			if (!UserInterfaceIdiomIsPhone) {
+				var splitViewController = new UISplitViewController ();
+				splitViewController.Title = "Settings";
+				var detail = new SettingsDetailController ();
+				
+				var masterNavigationController = new UINavigationController (master);
+				var detailNavigationController = new UINavigationController (detail);
+				splitViewController.WeakDelegate = detail;
+				splitViewController.ViewControllers = new UIViewController[] {
+					masterNavigationController,
+					detailNavigationController
+				};
+				return splitViewController;
+			}
+			return master;
 		}
 	}
 }

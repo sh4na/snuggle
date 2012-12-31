@@ -80,6 +80,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="monotouch" />
+    <Reference Include="zlib.net">
+      <HintPath>..\..\..\libs\zlib.net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -104,6 +107,14 @@
       <DependentUpon>MessageViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="messages\MessageTableSource.cs" />
+    <Compile Include="settings\SettingsListController.cs" />
+    <Compile Include="settings\SettingsListController.designer.cs">
+      <DependentUpon>SettingsListController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="settings\SettingsDetailController.cs" />
+    <Compile Include="settings\SettingsDetailController.designer.cs">
+      <DependentUpon>SettingsDetailController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -120,8 +131,13 @@
     <InterfaceDefinition Include="PhotosViewController_iPhone.xib" />
     <InterfaceDefinition Include="PhotosViewController_iPad.xib" />
     <InterfaceDefinition Include="messages\MessageViewCell_iPad.xib" />
+    <InterfaceDefinition Include="settings\SettingsListController_iPhone.xib" />
+    <InterfaceDefinition Include="settings\SettingsListController_iPad.xib" />
+    <InterfaceDefinition Include="settings\SettingsDetailController_iPhone.xib" />
+    <InterfaceDefinition Include="settings\SettingsDetailController_iPad.xib" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="messages\" />
+    <Folder Include="settings\" />
   </ItemGroup>
 </Project>
