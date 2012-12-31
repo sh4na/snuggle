@@ -16,6 +16,7 @@ namespace Snuggle
 		public SettingsListController ()
 			: base (UserInterfaceIdiomIsPhone ? "SettingsListController_iPhone" : "SettingsListController_iPad", null)
 		{
+			this.Title = "Settings";
 		}
 		
 		public override void DidReceiveMemoryWarning ()

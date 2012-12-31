@@ -90,16 +90,13 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="StreamViewController.cs" />
-    <Compile Include="StreamViewController.designer.cs">
+    <Compile Include="stream\StreamViewController.designer.cs">
       <DependentUpon>StreamViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="MessagesViewController.cs" />
-    <Compile Include="MessagesViewController.designer.cs">
+    <Compile Include="messages\MessagesViewController.designer.cs">
       <DependentUpon>MessagesViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="PhotosViewController.cs" />
-    <Compile Include="PhotosViewController.designer.cs">
+    <Compile Include="photos\PhotosViewController.designer.cs">
       <DependentUpon>PhotosViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="messages\MessageViewCell.cs" />
@@ -115,6 +112,9 @@
     <Compile Include="settings\SettingsDetailController.designer.cs">
       <DependentUpon>SettingsDetailController.cs</DependentUpon>
     </Compile>
+    <Compile Include="photos\PhotosViewController.cs" />
+    <Compile Include="messages\MessagesViewController.cs" />
+    <Compile Include="stream\StreamViewController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -124,20 +124,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <InterfaceDefinition Include="StreamViewController_iPhone.xib" />
-    <InterfaceDefinition Include="StreamViewController_iPad.xib" />
-    <InterfaceDefinition Include="MessagesViewController_iPhone.xib" />
-    <InterfaceDefinition Include="MessagesViewController_iPad.xib" />
-    <InterfaceDefinition Include="PhotosViewController_iPhone.xib" />
-    <InterfaceDefinition Include="PhotosViewController_iPad.xib" />
-    <InterfaceDefinition Include="messages\MessageViewCell_iPad.xib" />
     <InterfaceDefinition Include="settings\SettingsListController_iPhone.xib" />
     <InterfaceDefinition Include="settings\SettingsListController_iPad.xib" />
     <InterfaceDefinition Include="settings\SettingsDetailController_iPhone.xib" />
     <InterfaceDefinition Include="settings\SettingsDetailController_iPad.xib" />
+    <InterfaceDefinition Include="photos\PhotosViewController_iPad.xib" />
+    <InterfaceDefinition Include="photos\PhotosViewController_iPhone.xib" />
+    <InterfaceDefinition Include="messages\MessagesViewController_iPad.xib" />
+    <InterfaceDefinition Include="messages\MessagesViewController_iPhone.xib" />
+    <InterfaceDefinition Include="stream\StreamViewController_iPad.xib" />
+    <InterfaceDefinition Include="stream\StreamViewController_iPhone.xib" />
+    <InterfaceDefinition Include="messages\MessageViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="messages\" />
     <Folder Include="settings\" />
+    <Folder Include="photos\" />
+    <Folder Include="stream\" />
   </ItemGroup>
 </Project>

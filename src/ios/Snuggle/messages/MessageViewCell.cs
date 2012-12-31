@@ -43,7 +43,7 @@ namespace Snuggle
 
 		public MessageViewCell ()
 		{
-			MonoTouch.Foundation.NSBundle.MainBundle.LoadNib ("MessageViewCell_iPad", this, null);
+			MonoTouch.Foundation.NSBundle.MainBundle.LoadNib ("MessageViewCell", this, null);
 			Initialize ();
 		}
 
