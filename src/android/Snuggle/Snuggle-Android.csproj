@@ -43,6 +43,18 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
+    <Reference Include="Vici.CoolStorage.M4A">
+      <HintPath>..\..\..\libs\Vici.CoolStorage.M4A.dll</HintPath>
+    </Reference>
+    <Reference Include="Vici.Core.M4A">
+      <HintPath>..\..\..\libs\Vici.Core.M4A.dll</HintPath>
+    </Reference>
+    <Reference Include="xmpp">
+      <HintPath>..\..\..\libs\xmpp.dll</HintPath>
+    </Reference>
+    <Reference Include="zlib.net">
+      <HintPath>..\..\..\libs\zlib.net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activity1.cs" />

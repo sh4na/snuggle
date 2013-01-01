@@ -135,6 +135,7 @@
     <InterfaceDefinition Include="stream\StreamViewController_iPad.xib" />
     <InterfaceDefinition Include="stream\StreamViewController_iPhone.xib" />
     <InterfaceDefinition Include="messages\MessageViewCell.xib" />
+    <InterfaceDefinition Include="settings\GeneralSettingsView.xib" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="messages\" />

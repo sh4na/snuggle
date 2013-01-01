@@ -82,6 +82,6 @@ Global
 		{DD107842-B4E8-4A89-BA35-6F9A3329BA11} = {59202027-2F96-43E8-BA55-24997E478C6A}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = common\Common.csproj
+		StartupItem = ios\Snuggle\Snuggle-iOS.csproj
 	EndGlobalSection
 EndGlobal

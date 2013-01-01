@@ -12,6 +12,17 @@ namespace Snuggle.Common
 
 	public class Configuration
 	{
+		internal static string TableDesc = @"
+			CREATE TABLE Configuration (
+				ConfigurationId INTEGER PRIMARY KEY AUTOINCREMENT, 
+				Key TEXT(100) NOT NULL,
+				Type TEXT(20) NOT NULL,
+				Value TEXT(100) NOT NULL,
+				ServiceId INTEGER REFERENCES Service(ServiceId)
+			)
+		";
+
+
 		Dictionary<string, object> attributes = new Dictionary<string, object> ();
 		public object this[string attribute] {
 			get {
@@ -30,6 +41,14 @@ namespace Snuggle.Common
 
 	public class Service
 	{
+		internal static string TableDesc = @"
+			CREATE TABLE Service (
+				ServiceId INTEGER PRIMARY KEY AUTOINCREMENT, 
+				Name TEXT(100) NOT NULL,
+				Type INT NOT NULL
+			)
+		";
+
 		public enum Type
 		{
 			Xmpp

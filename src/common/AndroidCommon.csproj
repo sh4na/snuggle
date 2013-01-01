@@ -20,7 +20,7 @@
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>DEBUG;MOBILE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
@@ -41,10 +41,27 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
+    <Reference Include="xmpp">
+      <HintPath>..\..\libs\xmpp.dll</HintPath>
+    </Reference>
+    <Reference Include="zlib.net">
+      <HintPath>..\..\libs\zlib.net.dll</HintPath>
+    </Reference>
+    <Reference Include="Vici.CoolStorage.M4A">
+      <HintPath>..\..\libs\Vici.CoolStorage.M4A.dll</HintPath>
+    </Reference>
+    <Reference Include="Vici.Core.M4A">
+      <HintPath>..\..\libs\Vici.Core.M4A.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="Profile.cs" />
+    <Compile Include="Service.cs" />
+    <Compile Include="Storage.cs" />
+    <Compile Include="XmppService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

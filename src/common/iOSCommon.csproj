@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;NO_STRINGPREP</DefineConstants>
+    <DefineConstants>DEBUG;MOBILE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
@@ -41,6 +41,12 @@
     <Reference Include="xmpp">
       <HintPath>..\..\libs\xmpp.dll</HintPath>
     </Reference>
+    <Reference Include="Vici.CoolStorage.MT">
+      <HintPath>..\..\libs\Vici.CoolStorage.MT.dll</HintPath>
+    </Reference>
+    <Reference Include="Vici.Core.MT">
+      <HintPath>..\..\libs\Vici.Core.MT.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -49,5 +55,6 @@
     <Compile Include="Profile.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="XmppService.cs" />
+    <Compile Include="Storage.cs" />
   </ItemGroup>
 </Project>

@@ -53,22 +53,22 @@ namespace Snuggle
 		public UIViewController GetSettingsController ()
 		{
 			var master = new SettingsListController ();
+			var masterNavigationController = new UINavigationController (master);
+			UIViewController rootController = masterNavigationController;
 
 			if (!UserInterfaceIdiomIsPhone) {
 				var splitViewController = new UISplitViewController ();
-				splitViewController.Title = "Settings";
 				var detail = new SettingsDetailController ();
-				
-				var masterNavigationController = new UINavigationController (master);
 				var detailNavigationController = new UINavigationController (detail);
 				splitViewController.WeakDelegate = detail;
 				splitViewController.ViewControllers = new UIViewController[] {
 					masterNavigationController,
 					detailNavigationController
 				};
-				return splitViewController;
+				rootController = splitViewController;
 			}
-			return master;
+			rootController.Title = "Settings";
+			return rootController;
 		}
 	}
 }
