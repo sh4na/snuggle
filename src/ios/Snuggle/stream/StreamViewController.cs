@@ -9,6 +9,19 @@ namespace Snuggle
 {
 	public partial class StreamViewController : UIViewController
 	{
+		UITabBarItem tabBarItem;
+
+		public override UITabBarItem TabBarItem {
+			get {
+				if (tabBarItem == null)
+					tabBarItem = new UITabBarItem ("Stream", UIImage.FromFile("assets/tabbar_stream.png"), 0);
+				return tabBarItem;
+			}
+			set {
+				tabBarItem = value;
+			}
+		}
+
 		static bool UserInterfaceIdiomIsPhone {
 			get { return UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone; }
 		}

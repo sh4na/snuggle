@@ -12,6 +12,18 @@ namespace Snuggle
 		List<MessageTableViewItemGroup> tableItems;
 		List<MessageTableViewItem> items;
 
+		UITabBarItem tabBarItem;
+		public override UITabBarItem TabBarItem {
+			get {
+				if (tabBarItem == null)
+					tabBarItem = new UITabBarItem ("Messages", UIImage.FromFile("assets/tabbar_messages.png"), 0);
+				return tabBarItem;
+			}
+			set {
+				tabBarItem = value;
+			}
+		}
+
 		static bool UserInterfaceIdiomIsPhone {
 			get { return UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone; }
 		}

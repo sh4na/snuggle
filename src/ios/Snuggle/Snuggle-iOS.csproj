@@ -142,5 +142,14 @@
     <Folder Include="settings\" />
     <Folder Include="photos\" />
     <Folder Include="stream\" />
+    <Folder Include="assets\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\tabbar_messages%402x.png" />
+    <Content Include="assets\tabbar_messages.png" />
+    <Content Include="assets\tabbar_stream.png" />
+    <Content Include="assets\tabbar_stream%402x.png" />
+    <Content Include="assets\tabbar_photos.png" />
+    <Content Include="assets\tabbar_photos%402x.png" />
   </ItemGroup>
 </Project>
