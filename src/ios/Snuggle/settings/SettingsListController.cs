@@ -9,15 +9,19 @@ namespace Snuggle
 {
 	public partial class SettingsListController : UITableViewController
 	{
-		static bool UserInterfaceIdiomIsPhone {
+		public override string Title {
+			get { return "Settings"; }
+			set { }
+		}
+
+		static bool IsPhone {
 			get { return UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone; }
 		}
 
 		public SettingsListController ()
 			: base ("SettingsListController_iPad", null)
 		{
-			this.Title = "Settings";
-			if (!UserInterfaceIdiomIsPhone) {
+			if (!IsPhone) {
 				this.ClearsSelectionOnViewWillAppear = false;
 				this.ContentSizeForViewInPopover = new SizeF (320f, 600f);
 			}
@@ -37,7 +41,7 @@ namespace Snuggle
 			
 			// Perform any additional setup after loading the view, typically from a nib.
 			this.TableView.Source = new DataSource (this, new string[]{"General", "Theme"});
-			if (!UserInterfaceIdiomIsPhone)
+			if (!IsPhone)
 				this.TableView.SelectRow (NSIndexPath.FromRowSection (0, 0), false, UITableViewScrollPosition.Middle);
 		}
 		
@@ -56,7 +60,7 @@ namespace Snuggle
 		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
 		{
 			// Return true for supported orientations
-			if (UserInterfaceIdiomIsPhone) {
+			if (IsPhone) {
 				return (toInterfaceOrientation != UIInterfaceOrientation.PortraitUpsideDown);
 			} else {
 				return true;
@@ -107,7 +111,7 @@ namespace Snuggle
 			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
 			{
 				SettingsDetailController detail;
-				if (UserInterfaceIdiomIsPhone) {
+				if (IsPhone) {
 					detail = new SettingsDetailController ();
 					controller.NavigationController.PushViewController (detail, true);
 				} else

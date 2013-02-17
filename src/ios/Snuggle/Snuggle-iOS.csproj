@@ -115,6 +115,7 @@
     <Compile Include="photos\PhotosViewController.cs" />
     <Compile Include="messages\MessagesViewController.cs" />
     <Compile Include="stream\StreamViewController.cs" />
+    <Compile Include="SnuggleViewController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

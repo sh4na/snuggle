@@ -7,30 +7,14 @@ using MonoTouch.UIKit;
 
 namespace Snuggle
 {
-	public partial class PhotosViewController : UIViewController
+	public partial class PhotosViewController : SnuggleViewController
 	{
-		UITabBarItem tabBarItem;
-
-		public override UITabBarItem TabBarItem {
-			get {
-				if (tabBarItem == null)
-					tabBarItem = new UITabBarItem ("Photos", UIImage.FromFile("assets/tabbar_photos.png"), 0);
-				return tabBarItem;
-			}
-			set {
-				tabBarItem = value;
-			}
+		public override string Title {
+			get { return "Photos"; }
+			set { }
 		}
-
-		static bool UserInterfaceIdiomIsPhone {
-			get { return UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone; }
-		}
-
-		public PhotosViewController ()
-			: base (UserInterfaceIdiomIsPhone ? "PhotosViewController_iPhone" : "PhotosViewController_iPad", null)
-		{
-			this.Title = "Photos";
-		}
+		
+		public PhotosViewController () : base ("PhotosViewController") { }
 		
 		public override void DidReceiveMemoryWarning ()
 		{
@@ -62,7 +46,7 @@ namespace Snuggle
 		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
 		{
 			// Return true for supported orientations
-			if (UserInterfaceIdiomIsPhone) {
+			if (IsPhone) {
 				return (toInterfaceOrientation != UIInterfaceOrientation.PortraitUpsideDown);
 			} else {
 				return true;

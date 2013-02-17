@@ -8,20 +8,13 @@ using MonoTouch.ObjCRuntime;
 
 namespace Snuggle
 {
-	public partial class SettingsDetailController : UIViewController
+	public partial class SettingsDetailController : SnuggleViewController
 	{
-		static bool UserInterfaceIdiomIsPhone {
-			get { return UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone; }
-		}
-
 		UIPopoverController masterPopoverController;
 		string detailItem = null;
 		UIBarButtonItem saveButton;
 
-		public SettingsDetailController ()
-			: base ("SettingsDetailController_iPhone", null)
-		{
-		}
+		public SettingsDetailController () : base ("SettingsDetailController") { }
 		
 		public override void DidReceiveMemoryWarning ()
 		{
@@ -68,7 +61,7 @@ namespace Snuggle
 		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
 		{
 			// Return true for supported orientations
-			if (UserInterfaceIdiomIsPhone) {
+			if (IsPhone) {
 				return (toInterfaceOrientation != UIInterfaceOrientation.PortraitUpsideDown);
 			} else {
 				return true;

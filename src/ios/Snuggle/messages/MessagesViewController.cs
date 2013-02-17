@@ -7,32 +7,17 @@ using MonoTouch.UIKit;
 
 namespace Snuggle
 {
-	public partial class MessagesViewController : UIViewController
+	public partial class MessagesViewController : SnuggleViewController
 	{
 		List<MessageTableViewItemGroup> tableItems;
 		List<MessageTableViewItem> items;
 
-		UITabBarItem tabBarItem;
-		public override UITabBarItem TabBarItem {
-			get {
-				if (tabBarItem == null)
-					tabBarItem = new UITabBarItem ("Messages", UIImage.FromFile("assets/tabbar_messages.png"), 0);
-				return tabBarItem;
-			}
-			set {
-				tabBarItem = value;
-			}
+		public override string Title {
+			get { return "Messages"; }
+			set { }
 		}
-
-		static bool UserInterfaceIdiomIsPhone {
-			get { return UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone; }
-		}
-
-		public MessagesViewController ()
-			: base (UserInterfaceIdiomIsPhone ? "MessagesViewController_iPhone" : "MessagesViewController_iPad", null)
-		{
-			this.Title = "Messages";
-		}
+		
+		public MessagesViewController () : base ("MessagesViewController") { }
 		
 		public override void DidReceiveMemoryWarning ()
 		{
@@ -64,7 +49,7 @@ namespace Snuggle
 		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
 		{
 			// Return true for supported orientations
-			if (UserInterfaceIdiomIsPhone) {
+			if (IsPhone) {
 				return (toInterfaceOrientation != UIInterfaceOrientation.PortraitUpsideDown);
 			} else {
 				return true;

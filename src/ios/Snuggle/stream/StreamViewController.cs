@@ -7,30 +7,14 @@ using MonoTouch.UIKit;
 
 namespace Snuggle
 {
-	public partial class StreamViewController : UIViewController
+	public partial class StreamViewController : SnuggleViewController
 	{
-		UITabBarItem tabBarItem;
-
-		public override UITabBarItem TabBarItem {
-			get {
-				if (tabBarItem == null)
-					tabBarItem = new UITabBarItem ("Stream", UIImage.FromFile("assets/tabbar_stream.png"), 0);
-				return tabBarItem;
-			}
-			set {
-				tabBarItem = value;
-			}
+		public override string Title {
+			get { return "Stream"; }
+			set { }
 		}
 
-		static bool UserInterfaceIdiomIsPhone {
-			get { return UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone; }
-		}
-
-		public StreamViewController ()
-			: base (UserInterfaceIdiomIsPhone ? "StreamViewController_iPhone" : "StreamViewController_iPad", null)
-		{
-			this.Title = "Stream";
-		}
+		public StreamViewController () : base ("StreamViewController") { }
 		
 		public override void DidReceiveMemoryWarning ()
 		{
@@ -62,7 +46,7 @@ namespace Snuggle
 		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
 		{
 			// Return true for supported orientations
-			if (UserInterfaceIdiomIsPhone) {
+			if (IsPhone) {
 				return (toInterfaceOrientation != UIInterfaceOrientation.PortraitUpsideDown);
 			} else {
 				return true;
