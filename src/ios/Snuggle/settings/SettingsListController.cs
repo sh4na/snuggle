@@ -14,7 +14,7 @@ namespace Snuggle
 		}
 
 		public SettingsListController ()
-			: base (UserInterfaceIdiomIsPhone ? "SettingsListController_iPhone" : "SettingsListController_iPad", null)
+			: base ("SettingsListController_iPad", null)
 		{
 			this.Title = "Settings";
 			if (!UserInterfaceIdiomIsPhone) {

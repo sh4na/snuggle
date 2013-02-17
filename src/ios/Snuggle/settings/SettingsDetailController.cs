@@ -15,10 +15,11 @@ namespace Snuggle
 		}
 
 		UIPopoverController masterPopoverController;
-		string detailItem;
+		string detailItem = null;
+		UIBarButtonItem saveButton;
 
 		public SettingsDetailController ()
-			: base (UserInterfaceIdiomIsPhone ? "SettingsDetailController_iPhone" : "SettingsDetailController_iPad", null)
+			: base ("SettingsDetailController_iPhone", null)
 		{
 		}
 		
@@ -34,10 +35,19 @@ namespace Snuggle
 		{
 			base.ViewDidLoad ();
 			
+			saveButton = new UIBarButtonItem ("Save", UIBarButtonItemStyle.Plain, DoSave);
+			if (detailItem == null)
+				detailItem = "General";
+
 			// Perform any additional setup after loading the view, typically from a nib.
 			ConfigureView ();
 		}
-		
+
+		void DoSave (object sender, EventArgs ev)
+		{
+
+		}
+
 		public override void ViewDidUnload ()
 		{
 			base.ViewDidUnload ();
@@ -46,7 +56,12 @@ namespace Snuggle
 			// allow the Garbage Collector to collect them sooner.
 			//
 			// e.g. myOutlet.Dispose (); myOutlet = null;
-			
+
+			saveButton.Dispose ();
+			saveButton = null;
+
+			if (View.Subviews.Length > 0)
+				View.Subviews[0].RemoveFromSuperview ();
 			ReleaseDesignerOutlets ();
 		}
 		
@@ -92,10 +107,11 @@ namespace Snuggle
 		{
 			switch (detailItem) {
 				case "General":
-					NSArray views = NSBundle.MainBundle.LoadNib("GeneralSettingsView", this, null);
-					var view = Runtime.GetNSObject( views.ValueAt(0) ) as UIView;
+					NSArray views = NSBundle.MainBundle.LoadNib ("GeneralSettingsView", this, null);
+					var view = Runtime.GetNSObject( views.ValueAt (0) ) as UIView;
 					this.View.AddSubview (view);
 					this.View.BringSubviewToFront (view);
+					NavigationItem.SetRightBarButtonItem (saveButton, true);
 					break;
 				default:
 					break;
