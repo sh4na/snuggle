@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="Service.cs" />

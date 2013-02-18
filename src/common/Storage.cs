@@ -29,13 +29,13 @@ namespace Snuggle.Common
 			// configure the current database, create if it doesn't exist, and then run the anonymous
 			// delegate method after it's created
 #if MOBILE
-//			if (dbExists)
-//				File.Delete (GetDBPath (dbName));
+			if (dbExists)
+				File.Delete (GetDBPath (dbName));
 
 			CSConfig.SetDB (GetDBPath (dbName), SqliteOption.CreateIfNotExists, () => {
-				Profile.CreateDB ();
-				Service.CreateDB ();
-				Configuration.CreateDB ();
+				Profile.DBProfile.CreateDB ();
+				Service.DBService.CreateDB ();
+				Configuration.DBConfiguration.CreateDB ();
 
 			});
 #endif

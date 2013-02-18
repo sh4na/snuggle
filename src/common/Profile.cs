@@ -5,129 +5,95 @@ using Vici.CoolStorage;
 
 namespace Snuggle.Common
 {
-	[MapTo("Profile")]
-	public class Profile : CSObject<Profile, int>
+	public abstract class Profile : DBObject
 	{
-		internal static void CreateDB ()
-		{
-			CSDatabase.ExecuteNonQuery(@"
-				CREATE TABLE Profile (
-					ProfileId INTEGER PRIMARY KEY AUTOINCREMENT,
-					Name TEXT(100) NOT NULL,
-					Nickname TEXT(100) NOT NULL
-				)"
-			);
+		internal DBProfile db {
+			get { return base.obj as DBProfile; }
+			set { base.obj = value; }
 		}
 
-		public int ProfileId { get { return (int)GetField("ProfileId"); } }
-		public string Name { get { return (string)GetField("Name"); } set { SetField("Name",value); } }
-		public string Nickname { get { return (string)GetField("Nickname"); } set { SetField("Nickname",value); } }
+		public static Profile Current { get; private set; }
 
-		[OneToMany]
-		public SettingsList Settings { get { return (SettingsList) GetField("Settings"); } }
+		internal int Id { get { return db.ProfileId; } set { db.ProfileId = value; } }
+		public string Name { get { return db.Name; } set { db.Name = value; } }
+		public string Nickname { get { return db.Nickname; } set { db.Nickname = value; } }
 
-		public SettingsList SettingsByService (ServiceType type)
-		{
-			return Settings.FilteredBy (type);
+		public Profile (string username) : this (DBProfile.ReadFirst ("Nickname=@username", "@username", username))
+		{ 
 		}
 
-		public SettingsList this[ServiceType type]
+		public Profile () : this((DBProfile)null) {}
+
+		internal Profile (DBProfile db)
 		{
-			get { return Settings.FilteredBy (type); }
+			if (db == null)
+				db = DBProfile.New ();
+			this.db = db;
 		}
 
-		public void SetConfiguration (Service service, string key, object value)
+		[MapTo("Profile")]
+		internal class DBProfile : CSObject<DBProfile, int>
 		{
-			SettingsList settings = this[service.ServiceType];
-			var conf = settings.GetConfiguration (this, key);
-			if (conf == null)
-				conf = settings.Add (this, service, key, value);
-			else {
-				conf.Value = (string) value;
+			internal static void CreateDB ()
+			{
+				CSDatabase.ExecuteNonQuery(@"
+					CREATE TABLE Profile (
+						ProfileId INTEGER PRIMARY KEY AUTOINCREMENT,
+						Name TEXT(100) NOT NULL,
+						Nickname TEXT(100) NOT NULL,
+						Active INTEGER DEFAULT 0
+					)"
+				);
 			}
-			conf.Save ();
-			settings.Save ();
-		}
+			
+			public int ProfileId { get { return (int)GetField("ProfileId"); } set { SetField ("ProfileId", value); } }
+			public string Name { get { return (string)GetField("Name"); } set { SetField("Name",value); } }
+			public string Nickname { get { return (string)GetField("Nickname"); } set { SetField("Nickname",value); } }
+			public bool Active { get { return bool.Parse ((string)GetField("Active")); } set { SetField("Active", value ? 1 : 0); } }
 
-//		Dictionary<int, Configuration> serviceAtts = new Dictionary<int, Configuration> ();
+			[OneToMany]
+			public SettingsList Settings { get { return (SettingsList) GetField("Settings"); } }
+		}	
 
-//		public void
-//				Configuration id = null;
-//				serviceAtts.TryGetValue ((int)type, out id);
-//				return id;
-//			}
-//			set {
-//				if (serviceAtts.ContainsKey ((int)type))
-//					serviceAtts [(int)type] = value;
-//				else
-//					serviceAtts.Add ((int)type, value);
-//			}
-//		}
-
-
-		public static Profile Lookup (string username)
+		[Serializable]
+		internal partial class SettingsList : CSList<Configuration.DBConfiguration>
 		{
-			var profile = Profile.ReadFirst ("Nickname=@username", "@username", username);
-			if (profile == null) {
-				profile = Profile.New ();
-				profile.Nickname = username;
+			public SettingsList () { }
+			public SettingsList Filter (ServiceType type) { return (SettingsList) base.FilteredBy ("ServiceId=@sid", "@sid", (int)type); }
+			public SettingsList Filter (string key) { return (SettingsList) base.FilteredBy ("Key=@key", "@key", key); }
+			public SettingsList Filter (Profile profile) { return (SettingsList) base.FilteredBy ("ProfileId=@pid", "@pid", profile.Id); }
+			public SettingsList Filter (int serviceId, int profileId) { return (SettingsList) base.FilteredBy ("ServiceId=@sid and ProfileId=@pid", "@sid", serviceId, "@pid", profileId); }
+	
+			public Configuration Add (Service service, Profile profile, string key, object value)
+			{
+				Configuration conf = new Configuration (service, profile, key, value);
+				this.Add (conf.db);
+				return conf;
 			}
-			return profile;
-		}
-
-		public static Profile Create (string username)
-		{
-			var profile = Profile.New ();
-			profile.Nickname = username;
-			return profile;
-		}
-
-		public new bool Save ()
-		{
-			return base.Save ();
-		}
-	}
-
-	[Serializable]
-	public partial class SettingsList : CSList<Configuration>
-	{
-		public SettingsList () { }
-		public SettingsList FilteredBy (ServiceType type) { return (SettingsList) base.FilteredBy ("ServiceId = " + (int)type); }
-		public IList<string> Keys {
-			get {
-				List<string> keys = new List<string> ();
-				foreach (var c in this)
-					keys.Add (c.Key);
-				return keys;
+			
+			public bool ContainsKey (string key)
+			{
+				return Filter (key).HasObjects;
 			}
-		}
-
-		public object this[string key] {
-			get {
-				return this.Find (c => c.Key == key);
+			public string GetString (string key)
+			{
+				var ret = Filter (key);
+				if (ret.HasObjects)
+					return ret.FirstItem.Value as string;
+				return null;
 			}
-		}
-
-		public Configuration GetConfiguration (Profile profile, string key)
-		{
-			return FilteredBy ("ProfileId=@pid and Key=@key", "@pid", profile.ProfileId, "@key", key).FirstItem;
-		}
-
-		public Configuration Add (Profile profile, Service service, string key, object value)
-		{
-			Configuration conf = new Configuration ();
-			conf.ProfileId = profile.ProfileId;
-			conf.ServiceId = service.ServiceId;
-			conf.Key = key;
-			conf.Value = (string) value;
-			conf.Type = value.GetType ().ToString ();
-			this.Add (conf);
-			return conf;
-		}
-
-		public bool ContainsKey (string key)
-		{
-			return this[key] != null;
+			
+			public void Set (Service service, Profile profile, string key, object value)
+			{
+				var ret = Filter (key);
+				if (ret.HasObjects) {
+					Configuration conf;
+					conf = new Configuration (ret.FirstItem);
+					conf.Value = value;
+				} else {
+					Add (service, profile, key, value);
+				}
+			}
 		}
 	}
 

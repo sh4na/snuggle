@@ -44,11 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Profile.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Message.cs" />
+    <Compile Include="Profile.cs" />
     <Compile Include="Service.cs" />
-    <Compile Include="XmppService.cs" />
     <Compile Include="Storage.cs" />
+    <Compile Include="XmppService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

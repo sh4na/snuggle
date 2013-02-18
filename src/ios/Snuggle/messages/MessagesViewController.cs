@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
+
+
 namespace Snuggle
 {
 	public partial class MessagesViewController : SnuggleViewController
@@ -76,33 +78,9 @@ namespace Snuggle
 		public override void ViewDidAppear (bool animated)
 		{
 			base.ViewDidAppear (animated);
-/*
-			if (client == null) {
-				client = new JabberClient ();
-				client.OnConnect += (sender, stream) => connected = true;
-				client.OnDisconnect += (sender) => connected = false;
-				client.OnMessage += (sender, msg) => {
-					items.Add (new MessageTableViewItem () { Message = msg.Body });
-					InvokeOnMainThread(delegate{
-						tblMessages.ReloadData ();
-					});
 
-				};
-			}
-			
-			if (!connected) {
-				var jid = new JID ("test@zen");
-				client.User = jid.User;
-				client.Server = jid.Server;
-				client.Resource = jid.Resource;
-				client.NetworkHost = "spoiledcat.net";
-				client.AutoPresence = true;
-				client.OnInvalidCertificate += (sender, certificate, chain, sslPolicyErrors) => {
-					return true;
-				};
-				client.Connect ();
-			}
-*/
+			var session = new Common.XmppSession (Common.XmppProfile.Current);
+			session.Start ();
 		}
 	}
 }

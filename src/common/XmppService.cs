@@ -5,13 +5,13 @@ using jabber.client;
 
 namespace Snuggle.Common
 {
-	internal class XmppSession : ISession
+	public class XmppSession : ISession
 	{
 		bool running;
 		JabberClient client;
-		Profile profile;
+		XmppProfile profile;
 
-		public XmppSession (Profile profile)
+		public XmppSession (XmppProfile profile)
 		{
 			this.profile = profile;
 		}
@@ -19,31 +19,15 @@ namespace Snuggle.Common
 		void Init ()
 		{
 			client = new JabberClient ();
-			SettingsList settings = profile[ServiceType.Xmpp];
-			var server = settings["server"] as string;
-			var j = profile.Nickname + "@" + server;
-			var password = settings["password"] as string;
+			var j = profile.Username + "@" + profile.Server;
 
 			var jid = new JID (j);
 			client.User = jid.User;
 			client.Server = jid.Server;
 			client.Resource = jid.Resource;
-			client.NetworkHost = server;
-			client.Password = password;
+			client.NetworkHost = profile.NetworkHost;
+			client.Password = profile.Password;
 
-//			var configuration = profile[Service.Type.Xmpp];
-//			var server = configuration["server"] as string;
-//			var j = profile.Nickname + "@" + server;
-//			var password = configuration["password"] as string;
-//			var presence = configuration["presence"];
-//
-//			var jid = new JID (j);
-//			client.User = jid.User;
-//			client.Server = jid.Server;
-//			client.Resource = jid.Resource;
-//			client.NetworkHost = server;
-//			client.Password = password;
-//			client.AutoPresence = presence == null ? false : (bool)presence;
 		}
 
 		void Hookup ()
@@ -113,11 +97,19 @@ namespace Snuggle.Common
 		}
 	}
 
-	internal class XmppService : Service
+	public class XmppService : Service
 	{
+		public static XmppService Default { get; private set; }
+		static XmppService ()
+		{
+			Default = new XmppService ();
+		}
+
+		public XmppService () : base (ServiceType.Xmpp) {}
+
 		protected override void StartSession (Profile profile)
 		{
-			var session = new XmppSession (profile);
+			var session = new XmppSession (profile as XmppProfile);
 			Sessions.Add (session);
 			session.Start ();
 		}
@@ -130,5 +122,38 @@ namespace Snuggle.Common
 			Sessions.Clear ();
 		}
 	}
+
+	public class XmppProfile : Profile
+	{
+		SettingsList settings { get { return db.Settings.Filter (XmppService.Default.Id, this.db.ProfileId); } }
+		public new static XmppProfile Current { get; private set; }
+
+		static XmppProfile ()
+		{
+			var profile = DBProfile.ReadFirst ("Active=1");
+			Current = new XmppProfile (profile);
+			if (profile == null) {
+				Current.db.Active = true;
+				Current.Name = "new user";
+				Current.Nickname = "new user";
+				Current.Save ();
+			}
+		}
+
+		public XmppProfile (string username) : base (username)
+		{
+		}
+
+		internal XmppProfile (DBProfile profile) : base (profile)
+		{
+		}
+		
+		public string Username { get { return settings.GetString ("username"); } set { settings.Set (XmppService.Default, this, "username", value); } }
+		public string Server { get { return settings.GetString ("server"); } set { settings.Set (XmppService.Default, this, "server", value); } }
+		public string Resource { get { return settings.GetString ("resource"); } set { settings.Set (XmppService.Default, this, "resource", value); } }
+		public string NetworkHost { get { return settings.GetString ("networkhost"); } set { settings.Set (XmppService.Default, this, "networkhost", value); } }
+		public string Password { get { return settings.GetString ("password"); } set { settings.Set (XmppService.Default, this, "password", value); } }
+	}
+
 }
 

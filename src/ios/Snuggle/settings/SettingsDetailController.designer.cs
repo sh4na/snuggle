@@ -15,19 +15,28 @@ namespace Snuggle
 		MonoTouch.UIKit.UIToolbar Toolbar { get; set; }
 
 		[Outlet]
-		MonoTouch.UIKit.UITextField generalName { get; set; }
+		MonoTouch.UIKit.UITextField txtName { get; set; }
 
 		[Outlet]
-		MonoTouch.UIKit.UITextField generalUsername { get; set; }
+		MonoTouch.UIKit.UITextField txtNickname { get; set; }
 
 		[Outlet]
-		MonoTouch.UIKit.UITextField generalServer { get; set; }
+		MonoTouch.UIKit.UITextField xmppUsername { get; set; }
 
 		[Outlet]
-		MonoTouch.UIKit.UITextField generalPassword { get; set; }
+		MonoTouch.UIKit.UITextField xmppServer { get; set; }
 
 		[Outlet]
-		MonoTouch.UIKit.UITextField generalResource { get; set; }
+		MonoTouch.UIKit.UITextField xmppPassword { get; set; }
+
+		[Outlet]
+		MonoTouch.UIKit.UITextField xmppResource { get; set; }
+
+		[Outlet]
+		MonoTouch.UIKit.UITextField xmppHost { get; set; }
+
+		[Outlet]
+		MonoTouch.UIKit.UIScrollView scrollView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -36,29 +45,44 @@ namespace Snuggle
 				Toolbar = null;
 			}
 
-			if (generalName != null) {
-				generalName.Dispose ();
-				generalName = null;
+			if (txtName != null) {
+				txtName.Dispose ();
+				txtName = null;
 			}
 
-			if (generalUsername != null) {
-				generalUsername.Dispose ();
-				generalUsername = null;
+			if (txtNickname != null) {
+				txtNickname.Dispose ();
+				txtNickname = null;
 			}
 
-			if (generalServer != null) {
-				generalServer.Dispose ();
-				generalServer = null;
+			if (xmppUsername != null) {
+				xmppUsername.Dispose ();
+				xmppUsername = null;
 			}
 
-			if (generalPassword != null) {
-				generalPassword.Dispose ();
-				generalPassword = null;
+			if (xmppServer != null) {
+				xmppServer.Dispose ();
+				xmppServer = null;
 			}
 
-			if (generalResource != null) {
-				generalResource.Dispose ();
-				generalResource = null;
+			if (xmppPassword != null) {
+				xmppPassword.Dispose ();
+				xmppPassword = null;
+			}
+
+			if (xmppResource != null) {
+				xmppResource.Dispose ();
+				xmppResource = null;
+			}
+
+			if (xmppHost != null) {
+				xmppHost.Dispose ();
+				xmppHost = null;
+			}
+
+			if (scrollView != null) {
+				scrollView.Dispose ();
+				scrollView = null;
 			}
 		}
 	}

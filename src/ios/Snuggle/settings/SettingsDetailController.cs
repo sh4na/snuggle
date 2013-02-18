@@ -13,6 +13,8 @@ namespace Snuggle
 		UIPopoverController masterPopoverController;
 		string detailItem = null;
 		UIBarButtonItem saveButton;
+		Common.Profile loadedProfile;
+
 
 		public SettingsDetailController () : base ("SettingsDetailController") { }
 		
@@ -27,10 +29,10 @@ namespace Snuggle
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-			
+
 			saveButton = new UIBarButtonItem ("Save", UIBarButtonItemStyle.Plain, DoSave);
 			if (detailItem == null)
-				detailItem = "General";
+				detailItem = "Xmpp";
 
 			// Perform any additional setup after loading the view, typically from a nib.
 			ConfigureView ();
@@ -39,22 +41,18 @@ namespace Snuggle
 		void DoSave (object sender, EventArgs ev)
 		{
 			switch (detailItem) {
-				case "General":
-					var profile = Common.Profile.Lookup (generalUsername.Text);
-					profile.Name = generalName.Text;
+				case "Xmpp":
+					Common.XmppProfile profile = loadedProfile as Common.XmppProfile;
+					if (profile == null)
+						profile = new Common.XmppProfile (txtNickname.Text);
+					profile.Name = txtName.Text;
+					profile.Nickname = txtNickname.Text;
+					profile.Username = xmppUsername.Text;
+					profile.Password = xmppPassword.Text;
+					profile.Resource = xmppResource.Text;
+					profile.Server = xmppServer.Text;
+					profile.NetworkHost = xmppHost.Text;
 					profile.Save ();
-					var service = Common.Service.GetService (Common.ServiceType.Xmpp);
-					profile.SetConfiguration (service, "server", generalServer.Text);
-					profile.SetConfiguration (service, "password", generalPassword.Text);
-					profile.SetConfiguration (service, "resource", generalResource.Text);
-//					Common.Profile p = new Snuggle.Common.Profile ();
-//					p.Name = generalName.Text;
-//					p.Nickname = generalUsername.Text;
-//					Common.Configuration c = new Snuggle.Common.Configuration ();
-//					c["server"] = generalServer;
-//					c["password"] = generalPassword;
-//					c["resource"] = generalResource;
-
 					break;
 				default:
 					break;
@@ -119,21 +117,26 @@ namespace Snuggle
 		void ConfigureView ()
 		{
 			switch (detailItem) {
-				case "General":
+				case "Xmpp":
 					NSArray views = NSBundle.MainBundle.LoadNib ("GeneralSettingsView", this, null);
 					var view = Runtime.GetNSObject( views.ValueAt (0) ) as UIView;
+
+					scrollView.Frame = UIScreen.MainScreen.Bounds;
+					scrollView.ContentSize = new SizeF (320, 300);
+
 					this.View.AddSubview (view);
 					this.View.BringSubviewToFront (view);
 					NavigationItem.SetRightBarButtonItem (saveButton, true);
 
-					var service = Common.Service.GetService (Common.ServiceType.Xmpp);
-
-					var profile = Common.Profile.Lookup ("shana");
-					generalName.Text = profile.Name;
-					generalUsername.Text = profile.Nickname;
-					var settings = profile.SettingsByService (Snuggle.Common.ServiceType.Xmpp);
-					generalServer.Text = settings.GetConfiguration (profile, "server").Value;
-					generalPassword.Text = settings.GetConfiguration (profile, "password").Value;
+					loadedProfile = Common.XmppProfile.Current;
+					var profile = loadedProfile as Common.XmppProfile;
+					txtName.Text = profile.Name;
+					txtNickname.Text = profile.Nickname;
+					xmppUsername.Text = profile.Username;
+					xmppPassword.Text = profile.Password;
+					xmppResource.Text = profile.Resource;
+					xmppServer.Text = profile.Server;
+					xmppHost.Text = profile.NetworkHost;
 					break;
 				default:
 					break;

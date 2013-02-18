@@ -35,7 +35,7 @@ namespace Snuggle
 			base.ViewDidLoad ();
 			
 			// Perform any additional setup after loading the view, typically from a nib.
-			this.TableView.Source = new DataSource (this, new string[]{"General", "Theme"});
+			this.TableView.Source = new DataSource (this, new string[]{"Xmpp", "Theme"});
 			if (!IsPhone)
 				this.TableView.SelectRow (NSIndexPath.FromRowSection (0, 0), false, UITableViewScrollPosition.Middle);
 		}
