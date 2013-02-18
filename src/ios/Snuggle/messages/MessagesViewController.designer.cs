@@ -14,11 +14,38 @@ namespace Snuggle
 		[Outlet]
 		MonoTouch.UIKit.UITableView tblMessages { get; set; }
 
+		[Outlet]
+		MonoTouch.UIKit.UIScrollView scrollView { get; set; }
+
+		[Outlet]
+		MonoTouch.UIKit.UIButton btnSend { get; set; }
+
+		[Outlet]
+		MonoTouch.UIKit.UITextField txtMessage { get; set; }
+
+		[Action ("onSend:")]
+		partial void onSend (MonoTouch.Foundation.NSObject sender);
+		
 		void ReleaseDesignerOutlets ()
 		{
 			if (tblMessages != null) {
 				tblMessages.Dispose ();
 				tblMessages = null;
+			}
+
+			if (scrollView != null) {
+				scrollView.Dispose ();
+				scrollView = null;
+			}
+
+			if (btnSend != null) {
+				btnSend.Dispose ();
+				btnSend = null;
+			}
+
+			if (txtMessage != null) {
+				txtMessage.Dispose ();
+				txtMessage = null;
 			}
 		}
 	}

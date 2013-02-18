@@ -8,6 +8,7 @@ namespace Snuggle
 	public class MessageTableViewItem
 	{
 		public string Message { get; set; }
+		public string From { get; set; }
 
 		public string ImageName { get; set; }
 	}

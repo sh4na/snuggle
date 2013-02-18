@@ -54,7 +54,7 @@ namespace Snuggle.Common
 		void HandleOnMessage (object sender, jabber.protocol.client.Message msg)
 		{
 			if (!String.IsNullOrEmpty (msg.Body))
-				Service.OnData (this, msg.Body);
+				Service.OnData (this, msg.From, msg.Body);
 		}
 
 		void HandleOnDisconnect (object sender)
@@ -66,6 +66,11 @@ namespace Snuggle.Common
 		void HandleOnConnect (object sender, jabber.connection.StanzaStream stream)
 		{
 			Service.OnConnected (this);
+		}
+
+		public void Send (string to, string msg)
+		{
+			client.Message (to, msg);
 		}
 
 		public void Start ()

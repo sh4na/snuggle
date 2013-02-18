@@ -68,6 +68,7 @@ namespace Snuggle.Common
 			{
 				Configuration conf = new Configuration (service, profile, key, value);
 				this.Add (conf.db);
+				this.Save ();
 				return conf;
 			}
 			

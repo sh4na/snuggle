@@ -8,11 +8,9 @@ namespace Snuggle.Common
 	{
 		void Start ();
 		void Stop ();
+		void Send (string to, string msg);
 		bool Running { get; }
 	}
-
-
-
 
 
 	public enum ServiceType
@@ -82,7 +80,7 @@ namespace Snuggle.Common
 
 		public static event Action<ISession> OnConnect;
 		public static event Action<ISession> OnDisconnect;
-		public static event Action<ISession, object> OnEvent;
+		public static event Action<ISession, string, object> OnEvent;
 
 		//public static Dictionary<int, Service> Services = new Dictionary<int, Service> ();
 
@@ -129,10 +127,10 @@ namespace Snuggle.Common
 				OnDisconnect (session);
 		}
 
-		internal static void OnData (ISession session, object data)
+		internal static void OnData (ISession session, string from, object data)
 		{
 			if (OnEvent != null)
-				OnEvent (session, data);
+				OnEvent (session, from, data);
 		}
 
 	}

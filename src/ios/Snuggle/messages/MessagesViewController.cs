@@ -13,6 +13,7 @@ namespace Snuggle
 	{
 		List<MessageTableViewItemGroup> tableItems;
 		List<MessageTableViewItem> items;
+		Common.XmppSession session;
 
 		public override string Title {
 			get { return "Messages"; }
@@ -34,6 +35,9 @@ namespace Snuggle
 			base.ViewDidLoad ();
 			
 			// Perform any additional setup after loading the view, typically from a nib.
+
+			scrollView.Frame = UIScreen.MainScreen.Bounds;
+			scrollView.ContentSize = new SizeF (UIScreen.MainScreen.Bounds.Width, UIScreen.MainScreen.Bounds.Height);
 		}
 		
 		public override void ViewDidUnload ()
@@ -79,8 +83,29 @@ namespace Snuggle
 		{
 			base.ViewDidAppear (animated);
 
-			var session = new Common.XmppSession (Common.XmppProfile.Current);
+			session = new Common.XmppSession (Common.XmppProfile.Current);
 			session.Start ();
+			Common.XmppService.OnEvent += HandleOnEvent;
+		}
+
+		void HandleOnEvent (Snuggle.Common.ISession session, string from, object msg)
+		{
+			items.Add (new MessageTableViewItem () { From = from, Message = msg as string } );
+
+			InvokeOnMainThread(delegate{
+				tblMessages.ReloadData ();
+				tblMessages.ScrollToRow (NSIndexPath.FromRowSection(items.Count - 1, 0), UITableViewScrollPosition.Bottom, true);
+			});
+		}
+
+		protected override UIView KeyboardGetActiveView ()
+		{
+			return btnSend;
+		}
+
+		partial void onSend (MonoTouch.Foundation.NSObject sender)
+		{
+			session.Send (items[items.Count - 1].From, txtMessage.Text);
 		}
 	}
 }
