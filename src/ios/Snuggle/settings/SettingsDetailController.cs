@@ -38,7 +38,27 @@ namespace Snuggle
 
 		void DoSave (object sender, EventArgs ev)
 		{
+			switch (detailItem) {
+				case "General":
+					var profile = Common.Profile.Lookup (generalUsername.Text);
+					profile.Name = generalName.Text;
+					profile.Save ();
+					var service = Common.Service.GetService (Common.ServiceType.Xmpp);
+					profile.SetConfiguration (service, "server", generalServer.Text);
+					profile.SetConfiguration (service, "password", generalPassword.Text);
+					profile.SetConfiguration (service, "resource", generalResource.Text);
+//					Common.Profile p = new Snuggle.Common.Profile ();
+//					p.Name = generalName.Text;
+//					p.Nickname = generalUsername.Text;
+//					Common.Configuration c = new Snuggle.Common.Configuration ();
+//					c["server"] = generalServer;
+//					c["password"] = generalPassword;
+//					c["resource"] = generalResource;
 
+					break;
+				default:
+					break;
+			}
 		}
 
 		public override void ViewDidUnload ()
@@ -105,6 +125,15 @@ namespace Snuggle
 					this.View.AddSubview (view);
 					this.View.BringSubviewToFront (view);
 					NavigationItem.SetRightBarButtonItem (saveButton, true);
+
+					var service = Common.Service.GetService (Common.ServiceType.Xmpp);
+
+					var profile = Common.Profile.Lookup ("shana");
+					generalName.Text = profile.Name;
+					generalUsername.Text = profile.Nickname;
+					var settings = profile.SettingsByService (Snuggle.Common.ServiceType.Xmpp);
+					generalServer.Text = settings.GetConfiguration (profile, "server").Value;
+					generalPassword.Text = settings.GetConfiguration (profile, "password").Value;
 					break;
 				default:
 					break;

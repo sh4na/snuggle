@@ -30,6 +30,8 @@ namespace Snuggle
 		//
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
+			var storage = Common.Storage.LocalStorage;
+
 			// create a new window instance based on the screen size
 			window = new UIWindow (UIScreen.MainScreen.Bounds);
 

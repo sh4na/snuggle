@@ -19,12 +19,10 @@ namespace Snuggle.Common
 		void Init ()
 		{
 			client = new JabberClient ();
-			var configuration = profile[Service.Type.Xmpp];
-			var j = configuration["jid"] as string;
-			var server = configuration["server"] as string;
-			var password = configuration["password"] as string;
-			var presence = configuration["presence"];
-
+			SettingsList settings = profile[ServiceType.Xmpp];
+			var server = settings["server"] as string;
+			var j = profile.Nickname + "@" + server;
+			var password = settings["password"] as string;
 
 			var jid = new JID (j);
 			client.User = jid.User;
@@ -32,7 +30,20 @@ namespace Snuggle.Common
 			client.Resource = jid.Resource;
 			client.NetworkHost = server;
 			client.Password = password;
-			client.AutoPresence = presence == null ? false : (bool)presence;
+
+//			var configuration = profile[Service.Type.Xmpp];
+//			var server = configuration["server"] as string;
+//			var j = profile.Nickname + "@" + server;
+//			var password = configuration["password"] as string;
+//			var presence = configuration["presence"];
+//
+//			var jid = new JID (j);
+//			client.User = jid.User;
+//			client.Server = jid.Server;
+//			client.Resource = jid.Resource;
+//			client.NetworkHost = server;
+//			client.Password = password;
+//			client.AutoPresence = presence == null ? false : (bool)presence;
 		}
 
 		void Hookup ()

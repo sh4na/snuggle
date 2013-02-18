@@ -29,10 +29,14 @@ namespace Snuggle.Common
 			// configure the current database, create if it doesn't exist, and then run the anonymous
 			// delegate method after it's created
 #if MOBILE
+//			if (dbExists)
+//				File.Delete (GetDBPath (dbName));
+
 			CSConfig.SetDB (GetDBPath (dbName), SqliteOption.CreateIfNotExists, () => {
-				CSDatabase.ExecuteNonQuery (Profile.TableDesc);
-				CSDatabase.ExecuteNonQuery (Service.TableDesc);
-				CSDatabase.ExecuteNonQuery (Configuration.TableDesc);
+				Profile.CreateDB ();
+				Service.CreateDB ();
+				Configuration.CreateDB ();
+
 			});
 #endif
 		}
@@ -44,16 +48,6 @@ namespace Snuggle.Common
 			// create the db path
 			string db = Path.Combine (documents, dbName);
 			return db;
-		}
-
-		public void Store (Profile profile)
-		{
-
-		}
-
-		public Profile Load ()
-		{
-			return null;
 		}
 	}
 }
