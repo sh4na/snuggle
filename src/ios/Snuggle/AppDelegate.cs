@@ -68,6 +68,8 @@ namespace Snuggle
 				rootController = splitViewController;
 			}
 			rootController.Title = "Settings";
+			var tabBarIcon = new UITabBarItem ("Settings", UIImage.FromFile ("assets/tabbar_settings.png"), 0);
+			rootController.TabBarItem = tabBarIcon;
 			return rootController;
 		}
 	}

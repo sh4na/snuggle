@@ -9,11 +9,6 @@ namespace Snuggle
 {
 	public partial class SettingsListController : UITableViewController
 	{
-		public override string Title {
-			get { return "Settings"; }
-			set { }
-		}
-
 		static bool IsPhone {
 			get { return UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone; }
 		}

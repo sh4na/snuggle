@@ -152,5 +152,7 @@
     <Content Include="assets\tabbar_stream%402x.png" />
     <Content Include="assets\tabbar_photos.png" />
     <Content Include="assets\tabbar_photos%402x.png" />
+    <Content Include="assets\tabbar_settings.png" />
+    <Content Include="assets\tabbar_settings%402x.png" />
   </ItemGroup>
 </Project>
