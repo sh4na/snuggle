@@ -5,23 +5,14 @@ using Vici.CoolStorage;
 
 namespace Snuggle.Common
 {
-	public class Storage
+	public static class Storage
 	{
-		public static Storage LocalStorage {
-			get; private set;
+
+		public static void Init (bool resetData = false) {
+			CheckAndCreateDatabase ("db_viciCoolStorage.db3", resetData);
 		}
 
-		static Storage ()
-		{
-			LocalStorage = new Storage ();
-		}
-
-		Storage ()
-		{
-			CheckAndCreateDatabase ("db_viciCoolStorage.db3");
-		}
-
-		void CheckAndCreateDatabase (string dbName)
+		static void CheckAndCreateDatabase (string dbName, bool reset)
 		{	
 			// determine whether or not the database exists
 			bool dbExists = File.Exists (GetDBPath (dbName));
@@ -29,8 +20,8 @@ namespace Snuggle.Common
 			// configure the current database, create if it doesn't exist, and then run the anonymous
 			// delegate method after it's created
 #if MOBILE
-			//if (dbExists)
-			//	File.Delete (GetDBPath (dbName));
+			if (dbExists && reset)
+				File.Delete (GetDBPath (dbName));
 
 			CSConfig.SetDB (GetDBPath (dbName), SqliteOption.CreateIfNotExists, () => {
 				Profile.DBProfile.CreateDB ();
@@ -41,7 +32,7 @@ namespace Snuggle.Common
 #endif
 		}
 
-		string GetDBPath (string dbName)
+		static string GetDBPath (string dbName)
 		{
 			// get a reference to the documents folder
 			var documents = Environment.GetFolderPath (Environment.SpecialFolder.Personal);			

@@ -47,10 +47,7 @@ namespace Snuggle
 			switch (detailItem) {
 				case "Xmpp":
 					Common.XmppProfile profile = loadedProfile as Common.XmppProfile;
-					if (profile == null)
-						profile = new Common.XmppProfile (txtNickname.Text);
 					profile.Name = txtName.Text;
-					profile.Nickname = txtNickname.Text;
 					profile.Username = xmppUsername.Text;
 					profile.Password = xmppPassword.Text;
 					profile.Resource = xmppResource.Text;
@@ -135,7 +132,6 @@ namespace Snuggle
 					loadedProfile = Common.XmppProfile.Current;
 					var profile = loadedProfile as Common.XmppProfile;
 					txtName.Text = profile.Name;
-					txtNickname.Text = profile.Nickname;
 					xmppUsername.Text = profile.Username;
 					xmppPassword.Text = profile.Password;
 					xmppResource.Text = profile.Resource;

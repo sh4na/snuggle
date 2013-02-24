@@ -140,13 +140,8 @@ namespace Snuggle.Common
 			if (profile == null) {
 				Current.db.Active = true;
 				Current.Name = "new user";
-				Current.Nickname = "new user";
 				Current.Save ();
 			}
-		}
-
-		public XmppProfile (string username) : base (username)
-		{
 		}
 
 		internal XmppProfile (DBProfile profile) : base (profile)

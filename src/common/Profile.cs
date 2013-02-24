@@ -16,11 +16,6 @@ namespace Snuggle.Common
 
 		internal int Id { get { return db.ProfileId; } set { db.ProfileId = value; } }
 		public string Name { get { return db.Name; } set { db.Name = value; } }
-		public string Nickname { get { return db.Nickname; } set { db.Nickname = value; } }
-
-		public Profile (string username) : this (DBProfile.ReadFirst ("Nickname=@username", "@username", username))
-		{ 
-		}
 
 		public Profile () : this((DBProfile)null) {}
 
@@ -40,7 +35,6 @@ namespace Snuggle.Common
 					CREATE TABLE Profile (
 						ProfileId INTEGER PRIMARY KEY AUTOINCREMENT,
 						Name TEXT(100) NOT NULL,
-						Nickname TEXT(100) NOT NULL,
 						Active INTEGER DEFAULT 0
 					)"
 				);
@@ -48,7 +42,6 @@ namespace Snuggle.Common
 			
 			public int ProfileId { get { return (int)GetField("ProfileId"); } set { SetField ("ProfileId", value); } }
 			public string Name { get { return (string)GetField("Name"); } set { SetField("Name",value); } }
-			public string Nickname { get { return (string)GetField("Nickname"); } set { SetField("Nickname",value); } }
 			public bool Active { get { return bool.Parse ((string)GetField("Active")); } set { SetField("Active", value ? 1 : 0); } }
 
 			[OneToMany]
