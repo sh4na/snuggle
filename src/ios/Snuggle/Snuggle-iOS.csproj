@@ -83,6 +83,7 @@
     <Reference Include="zlib.net">
       <HintPath>..\..\..\libs\zlib.net.dll</HintPath>
     </Reference>
+    <Reference Include="MonoTouch.Dialog-1" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -104,10 +105,6 @@
       <DependentUpon>MessageViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="messages\MessageTableSource.cs" />
-    <Compile Include="settings\SettingsListController.cs" />
-    <Compile Include="settings\SettingsListController.designer.cs">
-      <DependentUpon>SettingsListController.cs</DependentUpon>
-    </Compile>
     <Compile Include="settings\SettingsDetailController.cs" />
     <Compile Include="settings\SettingsDetailController.designer.cs">
       <DependentUpon>SettingsDetailController.cs</DependentUpon>
@@ -116,6 +113,8 @@
     <Compile Include="messages\MessagesViewController.cs" />
     <Compile Include="stream\StreamViewController.cs" />
     <Compile Include="SnuggleViewController.cs" />
+    <Compile Include="slideout\SlideoutNavigationController.cs" />
+    <Compile Include="slideout\SnuggleNavigationController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -125,8 +124,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <InterfaceDefinition Include="settings\SettingsListController_iPhone.xib" />
-    <InterfaceDefinition Include="settings\SettingsListController_iPad.xib" />
     <InterfaceDefinition Include="settings\SettingsDetailController_iPhone.xib" />
     <InterfaceDefinition Include="settings\SettingsDetailController_iPad.xib" />
     <InterfaceDefinition Include="photos\PhotosViewController_iPad.xib" />
@@ -144,6 +141,7 @@
     <Folder Include="photos\" />
     <Folder Include="stream\" />
     <Folder Include="assets\" />
+    <Folder Include="slideout\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\tabbar_messages%402x.png" />

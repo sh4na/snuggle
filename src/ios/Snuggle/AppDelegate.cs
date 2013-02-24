@@ -19,7 +19,6 @@ namespace Snuggle
 	
 		// class-level declarations
 		UIWindow window;
-		UITabBarController tabBarController;
 
 		//
 		// This method is invoked when the application has loaded and is ready to run. In this 
@@ -34,45 +33,12 @@ namespace Snuggle
 
 			// create a new window instance based on the screen size
 			window = new UIWindow (UIScreen.MainScreen.Bounds);
-
-			// tab navigation
-			tabBarController = new UITabBarController ();
-			tabBarController.ViewControllers = new UIViewController[]
-			{ 
-				new StreamViewController (),
-				new MessagesViewController (),
-				new PhotosViewController (),
-				GetSettingsController ()
-			};
-			window.RootViewController = tabBarController;
+			window.RootViewController = new SnuggleNavigationController();
 
 			// make the window visible
 			window.MakeKeyAndVisible ();
 			
 			return true;
-		}
-
-		public UIViewController GetSettingsController ()
-		{
-			var master = new SettingsListController ();
-			var masterNavigationController = new UINavigationController (master);
-			UIViewController rootController = masterNavigationController;
-
-			if (!UserInterfaceIdiomIsPhone) {
-				var splitViewController = new UISplitViewController ();
-				var detail = new SettingsDetailController ();
-				var detailNavigationController = new UINavigationController (detail);
-				splitViewController.WeakDelegate = detail;
-				splitViewController.ViewControllers = new UIViewController[] {
-					masterNavigationController,
-					detailNavigationController
-				};
-				rootController = splitViewController;
-			}
-			rootController.Title = "Settings";
-			var tabBarIcon = new UITabBarItem ("Settings", UIImage.FromFile ("assets/tabbar_settings.png"), 0);
-			rootController.TabBarItem = tabBarIcon;
-			return rootController;
 		}
 	}
 }

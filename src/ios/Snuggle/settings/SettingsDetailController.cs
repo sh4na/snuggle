@@ -15,6 +15,10 @@ namespace Snuggle
 		UIBarButtonItem saveButton;
 		Common.Profile loadedProfile;
 
+		public override string Title {
+			get { return "Settings"; }
+			set { }
+		}
 
 		public SettingsDetailController () : base ("SettingsDetailController") { }
 		
