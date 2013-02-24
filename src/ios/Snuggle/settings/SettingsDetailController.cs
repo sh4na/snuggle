@@ -51,7 +51,7 @@ namespace Snuggle
 					profile.Username = xmppUsername.Text;
 					profile.Password = xmppPassword.Text;
 					profile.Resource = xmppResource.Text;
-					profile.Server = xmppServer.Text;
+//					profile.Server = xmppServer.Text;
 					profile.NetworkHost = xmppHost.Text;
 					profile.Save ();
 					break;
@@ -135,7 +135,7 @@ namespace Snuggle
 					xmppUsername.Text = profile.Username;
 					xmppPassword.Text = profile.Password;
 					xmppResource.Text = profile.Resource;
-					xmppServer.Text = profile.Server;
+//					xmppServer.Text = profile.Server;
 					xmppHost.Text = profile.NetworkHost;
 					break;
 				default:

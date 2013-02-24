@@ -105,7 +105,7 @@ namespace Snuggle
 
 		partial void onSend (MonoTouch.Foundation.NSObject sender)
 		{
-			session.Send (items[items.Count - 1].From, txtMessage.Text);
+			session.Send (Common.XmppProfile.Current.Buddy, txtMessage.Text);
 		}
 	}
 }

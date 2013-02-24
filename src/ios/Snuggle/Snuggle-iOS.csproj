@@ -121,6 +121,7 @@
     <Compile Include="SnuggleViewController.cs" />
     <Compile Include="slideout\SlideoutNavigationController.cs" />
     <Compile Include="slideout\SnuggleNavigationController.cs" />
+    <Compile Include="settings\Settings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

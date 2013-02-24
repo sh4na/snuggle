@@ -16,7 +16,7 @@ namespace Snuggle
 				new StreamViewController (),
 				new MessagesViewController (),
 				new PhotosViewController (),
-				new SettingsDetailController ()
+				new Settings ()
 			};
 
 			TopView = Views[0];

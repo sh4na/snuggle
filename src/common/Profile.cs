@@ -5,7 +5,7 @@ using Vici.CoolStorage;
 
 namespace Snuggle.Common
 {
-	public abstract class Profile : DBObject
+	public class Profile : DBObject
 	{
 		internal DBProfile db {
 			get { return base.obj as DBProfile; }
@@ -13,6 +13,22 @@ namespace Snuggle.Common
 		}
 
 		public static Profile Current { get; private set; }
+
+		static Profile ()
+		{
+			foreach (var l in DBProfile.All ()) {
+				string a =  l.Name + " " + l.Active;
+				int b = 0;
+			}
+
+			var profile = DBProfile.ReadFirst ("Active=@active", "@active", true);
+			Current = new Profile (profile);
+			if (profile == null) {
+				Current.db.Active = true;
+				Current.Name = "new user";
+				Current.Save ();
+			}
+		}
 
 		internal int Id { get { return db.ProfileId; } set { db.ProfileId = value; } }
 		public string Name { get { return db.Name; } set { db.Name = value; } }
@@ -42,7 +58,15 @@ namespace Snuggle.Common
 			
 			public int ProfileId { get { return (int)GetField("ProfileId"); } set { SetField ("ProfileId", value); } }
 			public string Name { get { return (string)GetField("Name"); } set { SetField("Name",value); } }
-			public bool Active { get { return bool.Parse ((string)GetField("Active")); } set { SetField("Active", value ? 1 : 0); } }
+			public bool Active {
+				get {
+					var value = GetField("Active");
+					if (value == null)
+						return false;
+					return (bool)value;
+				}
+				set { SetField("Active", value); } 
+			}
 
 			[OneToMany]
 			public SettingsList Settings { get { return (SettingsList) GetField("Settings"); } }

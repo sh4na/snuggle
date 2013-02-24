@@ -19,7 +19,7 @@ namespace Snuggle.Common
 		void Init ()
 		{
 			client = new JabberClient ();
-			var j = profile.Username + "@" + profile.Server;
+			var j = profile.Username;
 
 			var jid = new JID (j);
 			client.User = jid.User;
@@ -135,7 +135,7 @@ namespace Snuggle.Common
 
 		static XmppProfile ()
 		{
-			var profile = DBProfile.ReadFirst ("Active=1");
+			var profile = DBProfile.ReadFirst ("Active=@active", "@active", true);
 			Current = new XmppProfile (profile);
 			if (profile == null) {
 				Current.db.Active = true;
@@ -149,10 +149,10 @@ namespace Snuggle.Common
 		}
 		
 		public string Username { get { return settings.GetString ("username"); } set { settings.Set (XmppService.Default, this, "username", value); } }
-		public string Server { get { return settings.GetString ("server"); } set { settings.Set (XmppService.Default, this, "server", value); } }
 		public string Resource { get { return settings.GetString ("resource"); } set { settings.Set (XmppService.Default, this, "resource", value); } }
 		public string NetworkHost { get { return settings.GetString ("networkhost"); } set { settings.Set (XmppService.Default, this, "networkhost", value); } }
 		public string Password { get { return settings.GetString ("password"); } set { settings.Set (XmppService.Default, this, "password", value); } }
+		public string Buddy { get { return settings.GetString ("buddy"); } set { settings.Set (XmppService.Default, this, "buddy", value); } }
 	}
 
 }
