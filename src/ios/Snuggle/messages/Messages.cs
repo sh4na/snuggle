@@ -77,6 +77,7 @@ namespace Snuggle
 			//messageDialog = new DialogViewController (UITableViewStyle.Plain, root);
 
 			View = new UIScrollView ();
+			View.BackgroundColor = UIColor.White;
 
 			AddChildViewController (messagesList);
 			//AddChildViewController (messageDialog);
