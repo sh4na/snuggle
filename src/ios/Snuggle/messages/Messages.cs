@@ -131,17 +131,6 @@ namespace Snuggle
 
 		protected virtual void KeyboardWillShowNotification (NSNotification notification)
 		{
-			RectangleF keyboardBounds = UIKeyboard.BoundsFromNotification (notification);
-
-			//float height = currentEntryHeight;
-			//messagesList.View.Bounds = new RectangleF (messagesList.View.Bounds.Left, messagesList.View.Bounds.Top, View.Bounds.Width, messagesList.View.Bounds.Height - height - keyboardBounds.Size.Height);
-			//messagesList.Root.TableView.Bounds = new RectangleF (messagesList.View.Bounds.Left, messagesList.View.Bounds.Top, View.Bounds.Width, messagesList.View.Bounds.Height - height - keyboardBounds.Size.Height);
-			//messagesList.Root.TableView.ContentInset = new UIEdgeInsets (-keyboardBounds.Size.Height, 0, 0, 0);
-			//messageDialog.View.Frame = new RectangleF (0, keyboardBounds.Top, this.View.Bounds.Width, height);
-			//messageDialog.View.Frame.Y -= keyboardBounds.Height;
-			//messageDialog.View.Frame.Height += keyboardBounds.Height;
-			//messageDialog.TableView.Bounds.Y -= keyboardBounds.Height;
-
 			UIView activeView = KeyboardGetActiveView ();
 			if (activeView == null)
 				return;
@@ -150,7 +139,7 @@ namespace Snuggle
 			if (scrollView == null)
 				return;
 			
-
+			RectangleF keyboardBounds = UIKeyboard.BoundsFromNotification (notification);
 			UIEdgeInsets contentInsets = new UIEdgeInsets (0.0f, 0.0f, keyboardBounds.Size.Height, 0.0f);
 			scrollView.ContentInset = contentInsets;
 			scrollView.ScrollIndicatorInsets = contentInsets;
@@ -169,15 +158,11 @@ namespace Snuggle
 				PointF scrollPoint = new PointF (0.0f, activeFieldAbsoluteFrame.Location.Y + activeFieldAbsoluteFrame.Height + scrollView.ContentOffset.Y - viewRectAboveKeyboard.Height);
 				scrollView.SetContentOffset (scrollPoint, true);
 			}
-
+			messagesList.TableView.ContentInset = new UIEdgeInsets (keyboardBounds.Height, 0, 0, 0);
 		}
 		
 		protected virtual void KeyboardWillHideNotification (NSNotification notification)
 		{
-			//float height = messageEntry.GetCell (messageDialog.TableView).Bounds.Height;
-			//messagesList.View.Frame = new RectangleF (0, 0, this.View.Bounds.Width, this.View.Bounds.Height - height);
-			//messageDialog.View.Frame = new RectangleF (0, this.View.Bounds.Height - height, this.View.Bounds.Width, height);
-
 			UIView activeView = KeyboardGetActiveView ();
 			if (activeView == null)
 				return;
@@ -194,6 +179,8 @@ namespace Snuggle
 				scrollView.ContentInset = contentInsets;
 				scrollView.ScrollIndicatorInsets = contentInsets;
 			});
+			RectangleF keyboardBounds = UIKeyboard.BoundsFromNotification (notification);
+			messagesList.TableView.ContentInset = new UIEdgeInsets (0, 0, 0, 0);
 		}
 
 	}
@@ -209,8 +196,9 @@ namespace Snuggle
 			this.RefreshRequested += (sender, e) => {
 				for (int i = Root[0].Elements.Count; i < XmppSession.Current.Messages.Count; i++)
 					Root[0].Add (new MessageElement (XmppSession.Current.Messages[i]));
+				var inset = TableView.ContentInset;
 				ReloadComplete ();
-
+				TableView.ContentInset = inset;
 				ScrollLastEntryToView ();
 			};
 			Service.OnEvent += HandleOnEvent;
@@ -218,7 +206,7 @@ namespace Snuggle
 
 		void ScrollLastEntryToView ()
 		{
-			TableView.ScrollToRow (NSIndexPath.FromRowSection (Root[0].Elements.Count - 1, 0), UITableViewScrollPosition.Bottom, true);
+			TableView.ScrollToRow (Root[0].Elements[Root[0].Elements.Count - 1].IndexPath, UITableViewScrollPosition.Middle, true);
 		}
 
 		public override void ViewDidLoad ()
