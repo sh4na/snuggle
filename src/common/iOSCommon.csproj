@@ -63,5 +63,6 @@
     <Compile Include="Service.cs" />
     <Compile Include="Storage.cs" />
     <Compile Include="XmppService.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
 </Project>

@@ -80,7 +80,7 @@ namespace Snuggle.Common
 
 		public static event Action<ISession> OnConnect;
 		public static event Action<ISession> OnDisconnect;
-		public static event Action<ISession, string, object> OnEvent;
+		public static event Action<ISession, Message> OnEvent;
 
 		//public static Dictionary<int, Service> Services = new Dictionary<int, Service> ();
 
@@ -93,7 +93,7 @@ namespace Snuggle.Common
 		{
 			Service service = null;
 			if (type == Snuggle.Common.ServiceType.Xmpp)
-				service = XmppService.Default;
+				service = XmppService.Current;
 
 			if (service == null)
 				throw new Exception ("Service " + type + " not found");
@@ -104,7 +104,7 @@ namespace Snuggle.Common
 		{
 			Service service = null;
 			if (type == Snuggle.Common.ServiceType.Xmpp)
-				service = XmppService.Default;
+				service = XmppService.Current;
 			
 			if (service == null)
 				throw new Exception ("Service " + type + " not found");
@@ -127,10 +127,10 @@ namespace Snuggle.Common
 				OnDisconnect (session);
 		}
 
-		internal static void OnData (ISession session, string from, object data)
+		internal static void OnData (ISession session, Message message)
 		{
 			if (OnEvent != null)
-				OnEvent (session, from, data);
+				OnEvent (session, message);
 		}
 
 	}

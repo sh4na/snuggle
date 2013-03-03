@@ -8,7 +8,6 @@
     <ProjectGuid>{254CC6D1-E305-4328-96DA-342F95DE2937}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Snuggle.Common</RootNamespace>
-    <AssemblyName>Snuggle.Common</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -20,6 +19,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
+    <AssemblyName>Snuggle.Common</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -28,6 +28,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
+    <AssemblyName>Snuggle.Common</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Android|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -57,6 +58,7 @@
     <Compile Include="Service.cs" />
     <Compile Include="Storage.cs" />
     <Compile Include="XmppService.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

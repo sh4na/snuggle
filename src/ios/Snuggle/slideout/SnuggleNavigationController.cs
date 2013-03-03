@@ -14,7 +14,7 @@ namespace Snuggle
 			Views = new UIViewController[]
 			{ 
 				new StreamViewController (),
-				new MessagesViewController (),
+				new Messages (),
 				new PhotosViewController (),
 				new Settings ()
 			};

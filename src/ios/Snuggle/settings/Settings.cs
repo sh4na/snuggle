@@ -33,10 +33,17 @@ namespace Snuggle
 			};
 		}
 
-		public override void ViewWillDisappear (bool animated)
+		public override void ViewWillAppear (bool animated)
 		{
-			base.ViewWillDisappear (animated);
+			base.ViewWillAppear (animated);
 
+			NavigationItem.RightBarButtonItem = new UIBarButtonItem ("Save", UIBarButtonItemStyle.Plain, delegate {
+				Save ();
+			});
+		}
+
+		void Save ()
+		{
 			var xmpp = Common.XmppProfile.Current;
 			xmpp.Name = name.Value;
 			xmpp.Username = username.Value;

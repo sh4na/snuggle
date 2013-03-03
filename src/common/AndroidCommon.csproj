@@ -71,6 +71,7 @@
     <Compile Include="Service.cs" />
     <Compile Include="Storage.cs" />
     <Compile Include="XmppService.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

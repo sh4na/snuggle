@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
-
+using Snuggle.Common;
 
 
 namespace Snuggle
@@ -88,9 +88,9 @@ namespace Snuggle
 			Common.XmppService.OnEvent += HandleOnEvent;
 		}
 
-		void HandleOnEvent (Snuggle.Common.ISession session, string from, object msg)
+		void HandleOnEvent (Snuggle.Common.ISession session, Message message)
 		{
-			items.Add (new MessageTableViewItem () { From = from, Message = msg as string } );
+			items.Add (new MessageTableViewItem () { Message = message } );
 
 			InvokeOnMainThread(delegate{
 				tblMessages.ReloadData ();

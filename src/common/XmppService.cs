@@ -16,6 +16,16 @@ namespace Snuggle.Common
 			this.profile = profile;
 		}
 
+		public static ISession RunningSession {
+			get {
+				foreach (var session in XmppService.Current.Sessions) {
+					if (session is XmppSession)
+						return session;
+				}
+				return null;
+			}
+		} 
+
 		void Init ()
 		{
 			client = new JabberClient ();
@@ -53,8 +63,10 @@ namespace Snuggle.Common
 
 		void HandleOnMessage (object sender, jabber.protocol.client.Message msg)
 		{
-			if (!String.IsNullOrEmpty (msg.Body))
-				Service.OnData (this, msg.From, msg.Body);
+			if (msg.Type == jabber.protocol.client.MessageType.chat || msg.Type == jabber.protocol.client.MessageType.normal) {
+				if (!String.IsNullOrEmpty (msg.Body))
+					Service.OnData (this, new Message (Message.MessageType.Text, msg.From, msg.Stamp, DateTime.Now, msg.Body));
+			}
 		}
 
 		void HandleOnDisconnect (object sender)
@@ -104,10 +116,10 @@ namespace Snuggle.Common
 
 	public class XmppService : Service
 	{
-		public static XmppService Default { get; private set; }
+		public static XmppService Current { get; private set; }
 		static XmppService ()
 		{
-			Default = new XmppService ();
+			Current = new XmppService ();
 		}
 
 		public XmppService () : base (ServiceType.Xmpp) {}
@@ -130,7 +142,7 @@ namespace Snuggle.Common
 
 	public class XmppProfile : Profile
 	{
-		SettingsList settings { get { return db.Settings.Filter (XmppService.Default.Id, this.db.ProfileId); } }
+		SettingsList settings { get { return db.Settings.Filter (XmppService.Current.Id, this.db.ProfileId); } }
 		public new static XmppProfile Current { get; private set; }
 
 		static XmppProfile ()
@@ -148,11 +160,11 @@ namespace Snuggle.Common
 		{
 		}
 		
-		public string Username { get { return settings.GetString ("username"); } set { settings.Set (XmppService.Default, this, "username", value); } }
-		public string Resource { get { return settings.GetString ("resource"); } set { settings.Set (XmppService.Default, this, "resource", value); } }
-		public string NetworkHost { get { return settings.GetString ("networkhost"); } set { settings.Set (XmppService.Default, this, "networkhost", value); } }
-		public string Password { get { return settings.GetString ("password"); } set { settings.Set (XmppService.Default, this, "password", value); } }
-		public string Buddy { get { return settings.GetString ("buddy"); } set { settings.Set (XmppService.Default, this, "buddy", value); } }
+		public string Username { get { return settings.GetString ("username"); } set { settings.Set (XmppService.Current, this, "username", value); } }
+		public string Resource { get { return settings.GetString ("resource"); } set { settings.Set (XmppService.Current, this, "resource", value); } }
+		public string NetworkHost { get { return settings.GetString ("networkhost"); } set { settings.Set (XmppService.Current, this, "networkhost", value); } }
+		public string Password { get { return settings.GetString ("password"); } set { settings.Set (XmppService.Current, this, "password", value); } }
+		public string Buddy { get { return settings.GetString ("buddy"); } set { settings.Set (XmppService.Current, this, "buddy", value); } }
 	}
 
 }

@@ -2,15 +2,13 @@ using System;
 using System.Collections.Generic;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using Snuggle.Common;
 
 namespace Snuggle
 {
 	public class MessageTableViewItem
 	{
-		public string Message { get; set; }
-		public string From { get; set; }
-
-		public string ImageName { get; set; }
+		public Message Message { get; set; }
 	}
 
 	public class MessageTableViewItemGroup
@@ -83,7 +81,7 @@ namespace Snuggle
 			MessageTableViewItem item = tableItems[indexPath.Section].Items[indexPath.Row];
 			if (item == null || item.Message == null)
 				return 44;
-			return (float) (44 * (Math.Ceiling((double)item.Message.Length / 22)));
+			return (float) (44 * (Math.Ceiling((double)item.Message.Body.Length / 22)));
 		}
 
 		/// <summary>
@@ -119,7 +117,7 @@ namespace Snuggle
 			MessageTableViewItem item = tableItems[indexPath.Section].Items[indexPath.Row];
 
 			//---- set our cell properties
-			customCellController.Message = item.Message;
+			customCellController.Message = item.Message.Body;
 
 //			if (!string.IsNullOrEmpty (item.ImageName))
 //			{
