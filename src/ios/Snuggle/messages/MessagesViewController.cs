@@ -83,8 +83,7 @@ namespace Snuggle
 		{
 			base.ViewDidAppear (animated);
 
-			session = new Common.XmppSession (Common.XmppProfile.Current);
-			session.Start ();
+			XmppSession.StartSession ();
 			Common.XmppService.OnEvent += HandleOnEvent;
 		}
 
@@ -105,7 +104,7 @@ namespace Snuggle
 
 		partial void onSend (MonoTouch.Foundation.NSObject sender)
 		{
-			session.Send (Common.XmppProfile.Current.Buddy, txtMessage.Text);
+			session.Send (new Message (Message.MessageType.Text, Common.XmppProfile.Current.Username, Common.XmppProfile.Current.Buddy, DateTime.Now, null, txtMessage.Text));
 		}
 	}
 }

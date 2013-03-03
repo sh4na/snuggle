@@ -7,42 +7,230 @@ using MonoTouch.CoreGraphics;
 using MonoTouch.Dialog;
 using MonoTouch.Dialog.Utilities;
 
-using Snuggle.Common;
-
 namespace Snuggle
 {
-	public class Messages : DialogViewController
+	using Common;
+	using Locale = Common.Utils.Locale;
+
+	public class Messages : UIViewController
 	{
-		public Messages () : base (UITableViewStyle.Plain, null)
-		{
-			Autorotate = true;
-			EnableSearch = true;
-			AutoHideSearch = true;
+		public override string Title {
+			get { return Locale.GetText ("Chat"); }
+			set { }
 		}
+
+		MessagesList messagesList;
+		//DialogViewController messageDialog;
+		//EntryElement messageEntry;
+
+		UITextField messageEntry;
+		float currentEntryHeight;
 
 		public override void ViewWillAppear (bool animated)
 		{
 			base.ViewWillAppear (animated);
 
-			var root = new RootElement ("Messages") { UnevenRows = true };
-			var section = new Section ();
-			root.Add (section);
-			Root = root;
+			// TODO: move this to a base SnuggleViewController class
+			var tap = new UITapGestureRecognizer ();
+			tap.AddTarget (() =>{
+				View.EndEditing (true);
+			});
+			View.AddGestureRecognizer (tap);
+			tap.CancelsTouchesInView = false;
+		}
 
-			if (XmppSession.RunningSession == null) {
-				var session = new Common.XmppSession (Common.XmppProfile.Current);
-				session.Start ();
-			} else {
-				Common.XmppService.OnEvent -= HandleOnEvent;
+		public override void ViewDidLoad ()
+		{
+			base.ViewDidLoad ();
+
+			messageEntry = new UITextField ();
+			messageEntry.BackgroundColor = UIColor.White;
+			messageEntry.AutocapitalizationType = UITextAutocapitalizationType.None;
+			messageEntry.ReturnKeyType = UIReturnKeyType.Send;
+			messageEntry.BorderStyle = UITextBorderStyle.RoundedRect;
+			messageEntry.ShouldReturn += delegate {
+				if (XmppSession.Current != null && XmppSession.Current.Running) {
+					if (XmppSession.Current.Send (new Message (Message.MessageType.Text, Common.XmppProfile.Current.Username, Common.XmppProfile.Current.Buddy, DateTime.Now, null, messageEntry.Text))) {
+						//do it in red?
+					}
+					messagesList.TriggerRefresh ();
+					messageEntry.Text = "";
+				}
+				return true;
+			};
+
+			//messageEntry = new EntryElement ("Type:", "", "");
+
+
+			//messageEntry.Changed += (sender, e) => currentEntryHeight = messageEntry.GetCell (messageDialog.TableView).Bounds.Height;
+			//messageEntry.EntryEnded += (sender, data) => {
+			//	if (XmppSession.RunningSession != null && XmppSession.RunningSession.Running)
+			//		XmppSession.RunningSession.Send (XmppProfile.Current.Buddy, messageEntry.Value);
+			//};
+
+			//var root = new RootElement ("Entry");
+			//var messageSection = new Section ();
+			//messageSection.Add (messageEntry);
+			//root.Add (messageSection);
+
+			messagesList = new MessagesList ();
+			//messageDialog = new DialogViewController (UITableViewStyle.Plain, root);
+
+			View = new UIScrollView ();
+
+			AddChildViewController (messagesList);
+			//AddChildViewController (messageDialog);
+			View.AddSubview (messagesList.View);
+			//View.AddSubview (messageDialog.View);
+			View.AddSubview (messageEntry);
+
+			RegisterForKeyboardNotifications();
+		}
+
+		public override void ViewDidUnload ()
+		{
+			base.ViewDidUnload ();
+			
+			UnregisterKeyboardNotifications();
+		}
+
+		public override void ViewWillLayoutSubviews ()
+		{
+			base.ViewWillLayoutSubviews ();
+
+			//float height = messageEntry.GetCell (messageDialog.TableView).Bounds.Height;
+			float height = 44;
+			messagesList.View.Frame = new RectangleF (0, 0, this.View.Bounds.Width, this.View.Bounds.Height - height);
+			//messageDialog.View.Frame = new RectangleF (0, this.View.Bounds.Height - height, this.View.Bounds.Width, height);
+			messageEntry.Frame = new RectangleF (0, this.View.Bounds.Height - height, this.View.Bounds.Width, height);
+		}
+
+		NSObject keyboardObserverWillShow;
+		NSObject keyboardObserverWillHide;
+
+		protected virtual void RegisterForKeyboardNotifications ()
+		{
+			keyboardObserverWillShow = NSNotificationCenter.DefaultCenter.AddObserver (UIKeyboard.WillShowNotification, KeyboardWillShowNotification);
+			keyboardObserverWillHide = NSNotificationCenter.DefaultCenter.AddObserver (UIKeyboard.WillHideNotification, KeyboardWillHideNotification);
+		}
+		
+		protected virtual void UnregisterKeyboardNotifications()
+		{
+			NSNotificationCenter.DefaultCenter.RemoveObserver (keyboardObserverWillShow);
+			NSNotificationCenter.DefaultCenter.RemoveObserver (keyboardObserverWillHide);
+		}
+
+		protected virtual UIView KeyboardGetActiveView()
+		{
+			//if (messagesList.Root[0].Elements.Count > 0)
+			//	return messagesList.Root[0].Elements[messagesList.Root[0].Elements.Count - 1].GetCell (messagesList.TableView);
+			//return messageDialog.View;
+			return messageEntry;
+			return null;
+		}
+
+		protected virtual void KeyboardWillShowNotification (NSNotification notification)
+		{
+			RectangleF keyboardBounds = UIKeyboard.BoundsFromNotification (notification);
+
+			//float height = currentEntryHeight;
+			//messagesList.View.Bounds = new RectangleF (messagesList.View.Bounds.Left, messagesList.View.Bounds.Top, View.Bounds.Width, messagesList.View.Bounds.Height - height - keyboardBounds.Size.Height);
+			//messagesList.Root.TableView.Bounds = new RectangleF (messagesList.View.Bounds.Left, messagesList.View.Bounds.Top, View.Bounds.Width, messagesList.View.Bounds.Height - height - keyboardBounds.Size.Height);
+			//messagesList.Root.TableView.ContentInset = new UIEdgeInsets (-keyboardBounds.Size.Height, 0, 0, 0);
+			//messageDialog.View.Frame = new RectangleF (0, keyboardBounds.Top, this.View.Bounds.Width, height);
+			//messageDialog.View.Frame.Y -= keyboardBounds.Height;
+			//messageDialog.View.Frame.Height += keyboardBounds.Height;
+			//messageDialog.TableView.Bounds.Y -= keyboardBounds.Height;
+
+			UIView activeView = KeyboardGetActiveView ();
+			if (activeView == null)
+				return;
+			
+			UIScrollView scrollView = activeView.FindSuperviewOfType (this.View, typeof (UIScrollView)) as UIScrollView;
+			if (scrollView == null)
+				return;
+			
+
+			UIEdgeInsets contentInsets = new UIEdgeInsets (0.0f, 0.0f, keyboardBounds.Size.Height, 0.0f);
+			scrollView.ContentInset = contentInsets;
+			scrollView.ScrollIndicatorInsets = contentInsets;
+
+
+			// If activeField is hidden by keyboard, scroll it so it's visible
+			RectangleF viewRectAboveKeyboard = new RectangleF (this.View.Frame.Location, new SizeF (this.View.Frame.Width, this.View.Frame.Size.Height - keyboardBounds.Size.Height));
+			
+			RectangleF activeFieldAbsoluteFrame = activeView.Superview.ConvertRectToView (activeView.Frame, this.View);
+			// activeFieldAbsoluteFrame is relative to this.View so does not include any scrollView.ContentOffset
+			
+			// Check if the activeField will be partially or entirely covered by the keyboard
+			if (!viewRectAboveKeyboard.Contains(activeFieldAbsoluteFrame))
+			{
+				// Scroll to the activeField Y position + activeField.Height + current scrollView.ContentOffset.Y - the keyboard Height
+				PointF scrollPoint = new PointF (0.0f, activeFieldAbsoluteFrame.Location.Y + activeFieldAbsoluteFrame.Height + scrollView.ContentOffset.Y - viewRectAboveKeyboard.Height);
+				scrollView.SetContentOffset (scrollPoint, true);
 			}
-			Common.XmppService.OnEvent += HandleOnEvent;
 
+		}
+		
+		protected virtual void KeyboardWillHideNotification (NSNotification notification)
+		{
+			//float height = messageEntry.GetCell (messageDialog.TableView).Bounds.Height;
+			//messagesList.View.Frame = new RectangleF (0, 0, this.View.Bounds.Width, this.View.Bounds.Height - height);
+			//messageDialog.View.Frame = new RectangleF (0, this.View.Bounds.Height - height, this.View.Bounds.Width, height);
+
+			UIView activeView = KeyboardGetActiveView ();
+			if (activeView == null)
+				return;
+			
+			UIScrollView scrollView = activeView.FindSuperviewOfType (this.View, typeof(UIScrollView)) as UIScrollView;
+			if (scrollView == null)
+				return;
+
+			// Reset the content inset of the scrollView and animate using the current keyboard animation duration
+			double animationDuration = UIKeyboard.AnimationDurationFromNotification (notification);
+
+			UIEdgeInsets contentInsets = new UIEdgeInsets (0.0f, 0.0f, 0.0f, 0.0f);
+			UIView.Animate (animationDuration, delegate{
+				scrollView.ContentInset = contentInsets;
+				scrollView.ScrollIndicatorInsets = contentInsets;
+			});
+		}
+
+	}
+
+	public class MessagesList : DialogViewController
+	{
+		public MessagesList () : base (UITableViewStyle.Plain, new RootElement ("") { UnevenRows = true })
+		{
+			Autorotate = true;
+			EnableSearch = false;
+			AutoHideSearch = true;
+			Root.Add (new Section ());
+			this.RefreshRequested += (sender, e) => {
+				for (int i = Root[0].Elements.Count; i < XmppSession.Current.Messages.Count; i++)
+					Root[0].Add (new MessageElement (XmppSession.Current.Messages[i]));
+				ReloadComplete ();
+
+				ScrollLastEntryToView ();
+			};
+			Service.OnEvent += HandleOnEvent;
+		}
+
+		void ScrollLastEntryToView ()
+		{
+			TableView.ScrollToRow (NSIndexPath.FromRowSection (Root[0].Elements.Count - 1, 0), UITableViewScrollPosition.Bottom, true);
+		}
+
+		public override void ViewDidLoad ()
+		{
+			XmppSession.StartSession ();
+			base.ViewDidLoad ();
 		}
 
 		void HandleOnEvent (Snuggle.Common.ISession session, Message message)
 		{
 			BeginInvokeOnMainThread (delegate {
-				Root[0].Add (new MessageElement (message));
+				TriggerRefresh ();
 			});
 		}
 
@@ -78,7 +266,7 @@ namespace Snuggle
 			{
 				return Message.Body.IndexOf (text, StringComparison.CurrentCultureIgnoreCase) != -1;
 			}
-
+			
 			#region IElementSizing implementation
 			public float GetHeight (UITableView tableView, NSIndexPath indexPath)
 			{
@@ -207,7 +395,7 @@ namespace Snuggle
 					DrawString (message.Body, new RectangleF (xText, bounds.Y + TextYOffset, bounds.Width-PicAreaWidth-TextWidthPadding, bounds.Height-TextYOffset), textFont, UILineBreakMode.WordWrap);
 					timeColor.SetColor ();
 
-					string time = Utils.FormatTime (new TimeSpan (DateTime.UtcNow.Ticks - message.ReceivedTime.Ticks));
+					string time = Utils.FormatTime (new TimeSpan (DateTime.UtcNow.Ticks - (message.ReceivedTime.HasValue ? message.ReceivedTime.Value.Ticks : 0)));
 					DrawString (time, new RectangleF (xText, TextHeightPadding, bounds.Width-PicAreaWidth-TextWidthPadding, timeSize),
 					            timeFont, UILineBreakMode.Clip, UITextAlignment.Right);
 

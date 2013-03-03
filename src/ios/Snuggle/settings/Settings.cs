@@ -5,10 +5,11 @@ using MonoTouch.Dialog;
 namespace Snuggle
 {
 	using Common;
+	using Locale = Common.Utils.Locale;
 	public class Settings : DialogViewController
 	{
 		public override string Title {
-			get { return "Settings"; }
+			get { return Locale.GetText ("Settings"); }
 			set { }
 		}
 
@@ -20,15 +21,15 @@ namespace Snuggle
 			var xmpp = Common.XmppProfile.Current;
 
 			Root = new RootElement ("Settings") {
-				new Section ("Profile") {
-					(name = new EntryElement ("Name", "Real Name", profile.Name))
+				new Section (Locale.GetText ("Profile")) {
+					(name = new EntryElement (Locale.GetText ("Name"), Locale.GetText ("Real Name"), profile.Name))
 				},
-				new Section ("Xmpp") {
-					(username = new EntryElement ("Username", "user@server", xmpp.Username)),
-					(password = new EntryElement ("Password", "", xmpp.Password, true)),
-					(server = new EntryElement ("Server", "", xmpp.NetworkHost) { AutocapitalizationType = UITextAutocapitalizationType.None, AutocorrectionType = UITextAutocorrectionType.No, KeyboardType = UIKeyboardType.Url }),
-					(resource = new EntryElement ("Resource", "Home", xmpp.Resource)),
-					(buddy = new EntryElement ("Snuggle Buddy", "Snuggle buddy's username", xmpp.Buddy)),
+				new Section (Locale.GetText ("Xmpp")) {
+					(username = new EntryElement (Locale.GetText ("Username"), Locale.GetText ("user@server"), xmpp.Username)),
+					(password = new EntryElement (Locale.GetText ("Password"), "", xmpp.Password, true)),
+					(server = new EntryElement (Locale.GetText ("Server"), "", xmpp.NetworkHost) { AutocapitalizationType = UITextAutocapitalizationType.None, AutocorrectionType = UITextAutocorrectionType.No, KeyboardType = UIKeyboardType.Url }),
+					(resource = new EntryElement (Locale.GetText ("Resource"), "Home", xmpp.Resource)),
+					(buddy = new EntryElement (Locale.GetText ("Snuggle Buddy"), Locale.GetText ("Snuggle buddy's username"), xmpp.Buddy)),
 				}
 			};
 		}
@@ -37,7 +38,16 @@ namespace Snuggle
 		{
 			base.ViewWillAppear (animated);
 
-			NavigationItem.RightBarButtonItem = new UIBarButtonItem ("Save", UIBarButtonItemStyle.Plain, delegate {
+			// TODO: move this to a base SnuggleViewController class
+			// http://stackoverflow.com/questions/10824092/monotouch-dialog-dismissing-keyboard-by-touching-anywhere-in-dialogviewcontroll
+			var tap = new UITapGestureRecognizer ();
+			tap.AddTarget (() =>{
+				View.EndEditing (true);
+			});
+			View.AddGestureRecognizer (tap);
+			tap.CancelsTouchesInView = false;
+
+			NavigationItem.RightBarButtonItem = new UIBarButtonItem (Locale.GetText ("Save"), UIBarButtonItemStyle.Plain, delegate {
 				Save ();
 			});
 		}

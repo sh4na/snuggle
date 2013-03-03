@@ -5,18 +5,18 @@ using jabber.client;
 
 namespace Snuggle.Common
 {
-	public class XmppSession : ISession
+	public class XmppSession : Session
 	{
 		bool running;
 		JabberClient client;
 		XmppProfile profile;
 
-		public XmppSession (XmppProfile profile)
+		internal XmppSession (XmppProfile profile)
 		{
 			this.profile = profile;
 		}
 
-		public static ISession RunningSession {
+		public static ISession Current {
 			get {
 				foreach (var session in XmppService.Current.Sessions) {
 					if (session is XmppSession)
@@ -25,6 +25,16 @@ namespace Snuggle.Common
 				return null;
 			}
 		} 
+
+		public static XmppSession StartSession ()
+		{
+			var session = Current;
+			if (session == null)
+				session = XmppService.Current.StartSession ();
+			else if (!session.Running)
+				session.Start ();
+			return session as XmppSession;
+		}
 
 		void Init ()
 		{
@@ -65,7 +75,7 @@ namespace Snuggle.Common
 		{
 			if (msg.Type == jabber.protocol.client.MessageType.chat || msg.Type == jabber.protocol.client.MessageType.normal) {
 				if (!String.IsNullOrEmpty (msg.Body))
-					Service.OnData (this, new Message (Message.MessageType.Text, msg.From, msg.Stamp, DateTime.Now, msg.Body));
+					Service.OnData (this, new Message (Message.MessageType.Text, msg.From, msg.To, msg.Stamp, DateTime.Now, msg.Body));
 			}
 		}
 
@@ -73,19 +83,27 @@ namespace Snuggle.Common
 		{
 			Service.OnDisconnected (this);
 			Release ();
+			running = false;
 		}
 
 		void HandleOnConnect (object sender, jabber.connection.StanzaStream stream)
 		{
 			Service.OnConnected (this);
+			running = true;
 		}
 
-		public void Send (string to, string msg)
+		public override bool Send (Message message)
 		{
-			client.Message (to, msg);
+			Messages.Add (message);
+			try {
+				client.Message (message.To, message.Body);
+			} catch (Exception) {
+				return false;
+			}
+			return true;
 		}
 
-		public void Start ()
+		public override void Start ()
 		{
 			Stop ();
 
@@ -93,23 +111,22 @@ namespace Snuggle.Common
 				Init ();
 
 			Hookup ();
-			running = true;
 
 			client.Connect ();
 
 		}
 
-		public void Stop ()
+		public override void Stop ()
 		{
 			if (!running)
 				return;
-			running = false;
+
 			if (client == null)
 				return;
 			client.Close ();
 		}
 
-		public bool Running {
+		public override bool Running {
 			get { return running; }
 		}
 	}
@@ -124,14 +141,17 @@ namespace Snuggle.Common
 
 		public XmppService () : base (ServiceType.Xmpp) {}
 
-		protected override void StartSession (Profile profile)
+		public override ISession StartSession (Profile profile = null)
 		{
+			if (profile == null)
+				profile = XmppProfile.Current;
 			var session = new XmppSession (profile as XmppProfile);
 			Sessions.Add (session);
 			session.Start ();
+			return session;
 		}
 
-		protected override void Shutdown ()
+		public override void Shutdown ()
 		{
 			foreach (var session in Sessions) {
 				session.Stop ();

@@ -8,10 +8,21 @@ namespace Snuggle.Common
 	{
 		void Start ();
 		void Stop ();
-		void Send (string to, string msg);
+		bool Send (Message message);
 		bool Running { get; }
+		List<Message> Messages { get; }
 	}
 
+	public abstract class Session : ISession
+	{
+		List<Message> messages = new List<Message> ();
+		public List<Message> Messages { get { return messages; } }
+
+		public abstract bool Running { get; }
+		public abstract void Start ();
+		public abstract void Stop ();
+		public abstract bool Send (Message message);
+	}
 
 	public enum ServiceType
 	{
@@ -92,12 +103,18 @@ namespace Snuggle.Common
 		public static void Connect (Profile profile, ServiceType type)
 		{
 			Service service = null;
-			if (type == Snuggle.Common.ServiceType.Xmpp)
+			if (type == Snuggle.Common.ServiceType.Xmpp) {
 				service = XmppService.Current;
+				if (service == null)
+					throw new Exception ("Service " + type + " not found");
+				var session = XmppSession.Current;
+				if (session == null)
+					service.StartSession (profile);
+				else
+					session.Start ();
+			}
 
-			if (service == null)
-				throw new Exception ("Service " + type + " not found");
-			service.StartSession (profile);
+			throw new Exception ("Service " + type + " not found");
 		}
 
 		public static void Disconnect (ServiceType type)
@@ -111,8 +128,8 @@ namespace Snuggle.Common
 			service.Shutdown ();
 		}
 
-		protected virtual void StartSession (Profile profile) {}
-		protected virtual void Shutdown () {}
+		public virtual ISession StartSession (Profile profile = null) { return null; }
+		public virtual void Shutdown () {}
 
 
 		internal static void OnConnected (ISession session)
@@ -127,8 +144,9 @@ namespace Snuggle.Common
 				OnDisconnect (session);
 		}
 
-		internal static void OnData (ISession session, Message message)
+		internal static void OnData (Session session, Message message)
 		{
+			session.Messages.Add (message);
 			if (OnEvent != null)
 				OnEvent (session, message);
 		}
