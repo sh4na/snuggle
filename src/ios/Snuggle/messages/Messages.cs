@@ -159,7 +159,9 @@ namespace Snuggle
 				PointF scrollPoint = new PointF (0.0f, activeFieldAbsoluteFrame.Location.Y + activeFieldAbsoluteFrame.Height + scrollView.ContentOffset.Y - viewRectAboveKeyboard.Height);
 				scrollView.SetContentOffset (scrollPoint, true);
 			}
-			messagesList.TableView.ContentInset = new UIEdgeInsets (keyboardBounds.Height, 0, 0, 0);
+			contentInsets = new UIEdgeInsets (keyboardBounds.Height, 0, 0, 0);
+			messagesList.TableView.ContentInset = contentInsets;
+			messagesList.TableView.ScrollIndicatorInsets = contentInsets;
 		}
 		
 		protected virtual void KeyboardWillHideNotification (NSNotification notification)
@@ -181,7 +183,9 @@ namespace Snuggle
 				scrollView.ScrollIndicatorInsets = contentInsets;
 			});
 			RectangleF keyboardBounds = UIKeyboard.BoundsFromNotification (notification);
-			messagesList.TableView.ContentInset = new UIEdgeInsets (0, 0, 0, 0);
+			contentInsets = new UIEdgeInsets (0, 0, 0, 0);
+			messagesList.TableView.ContentInset = contentInsets;
+			messagesList.TableView.ScrollIndicatorInsets = contentInsets;
 		}
 
 	}
