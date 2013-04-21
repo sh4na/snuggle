@@ -16,21 +16,18 @@ namespace Snuggle.Common
 
 		static Profile ()
 		{
-			foreach (var l in DBProfile.All ()) {
-				string a =  l.Name + " " + l.Active;
-				int b = 0;
-			}
-
 			var profile = DBProfile.ReadFirst ("Active=@active", "@active", true);
 			Current = new Profile (profile);
 			if (profile == null) {
 				Current.db.Active = true;
+				Current.SnuggleKey = "newuser";
 				Current.Name = "new user";
 				Current.Save ();
 			}
 		}
 
 		internal int Id { get { return db.ProfileId; } set { db.ProfileId = value; } }
+		public string SnuggleKey { get { return db.SnuggleKey; } set { db.SnuggleKey = value; } }
 		public string Name { get { return db.Name; } set { db.Name = value; } }
 
 		public Profile () : this((DBProfile)null) {}
@@ -50,6 +47,7 @@ namespace Snuggle.Common
 				CSDatabase.ExecuteNonQuery(@"
 					CREATE TABLE Profile (
 						ProfileId INTEGER PRIMARY KEY AUTOINCREMENT,
+						SnuggleKey TEXT(30) NOT NULL,
 						Name TEXT(100) NOT NULL,
 						Active INTEGER DEFAULT 0
 					)"
@@ -57,6 +55,7 @@ namespace Snuggle.Common
 			}
 			
 			public int ProfileId { get { return (int)GetField("ProfileId"); } set { SetField ("ProfileId", value); } }
+			public string SnuggleKey { get { return (string)GetField("SnuggleKey"); } set { SetField("SnuggleKey",value); } }
 			public string Name { get { return (string)GetField("Name"); } set { SetField("Name",value); } }
 			public bool Active {
 				get {

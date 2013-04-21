@@ -15,6 +15,7 @@ namespace Snuggle
 			{ 
 				new StreamViewController (),
 				new Messages (),
+				new ExpensesView (),
 				new PhotosViewController (),
 				new Settings ()
 			};

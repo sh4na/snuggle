@@ -72,6 +72,8 @@
     <Compile Include="Storage.cs" />
     <Compile Include="XmppService.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="expenses\Expense.cs" />
+    <Compile Include="expenses\Payment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -80,4 +82,7 @@
     <AndroidResource Include="Resources\values\Strings.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="expenses\" />
+  </ItemGroup>
 </Project>

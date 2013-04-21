@@ -123,6 +123,9 @@
     <Compile Include="slideout\SnuggleNavigationController.cs" />
     <Compile Include="settings\Settings.cs" />
     <Compile Include="messages\Messages.cs" />
+    <Compile Include="expenses\ExpensesView.cs" />
+    <Compile Include="expenses\ExpenseElement.cs" />
+    <Compile Include="expenses\PaymentElement.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -150,6 +153,7 @@
     <Folder Include="stream\" />
     <Folder Include="assets\" />
     <Folder Include="slideout\" />
+    <Folder Include="expenses\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\tabbar_messages%402x.png" />
