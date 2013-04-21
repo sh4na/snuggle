@@ -6,15 +6,29 @@ using MonoTouch.Dialog;
 namespace Snuggle
 {
 	using Payment = Common.Payment;
-	public class PaymentElement : Element
+	public class PaymentElement : RootElement
 	{
 		private const string key = "paymentelement";
 
 		private Payment payment;
 
-		public PaymentElement (Payment payment) : base (null)
+		public PaymentElement (Payment payment) : base ("Payment")
 		{
 			this.payment = payment;
+
+			this.Add (new Section () { 
+				new StringElement ("From", this.payment.From.Name),
+				new StringElement ("To", this.payment.To.Name),
+				new StringElement ("Date", this.payment.Time.ToLongDateString ()),
+				new StringElement ("Amount", this.payment.Amount.ToString("C2", CultureInfo.CreateSpecificCulture (this.payment.CurrencyCode))),
+				new StringElement ("Currency", this.payment.CurrencyCode)
+			});
+
+			var expensesSection = new Section ("Expenses");
+			foreach (var expense in this.payment.Expenses)
+				expensesSection.Add (new ExpenseElement (expense));
+
+			this.Add (expensesSection);
 		}
 		
 		public override UITableViewCell GetCell (UITableView tableView)

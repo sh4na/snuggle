@@ -6,7 +6,7 @@ using MonoTouch.Dialog;
 namespace Snuggle
 {
 	using Expense = Common.Expense;
-	public class ExpenseElement : Element
+	public class ExpenseElement : RootElement
 	{
 		private const string key = "expenseelement";
 
@@ -15,9 +15,18 @@ namespace Snuggle
 
 		private Expense expense;
 
-		public ExpenseElement (Expense expense) : base (null)
+		public ExpenseElement (Expense expense) : base (expense.Description)
 		{
 			this.expense = expense;
+
+			this.Add (new Section () {
+				new StringElement ("Paid By", this.expense.Profile.Name),
+				new StringElement ("Amount", this.expense.Amount.ToString ("C2", CultureInfo.CreateSpecificCulture (this.expense.CurrencyCode))),
+				new StringElement ("Currency", this.expense.CurrencyCode),
+				new StringElement ("Date", this.expense.Time.ToLongDateString ()),
+				new StringElement ("Category", this.expense.Category),
+				new StringElement ("Status", this.expense.Status.ToString ())
+			});
 		}
 
 		public override UITableViewCell GetCell (UITableView tableView)
