@@ -10,12 +10,17 @@ namespace Snuggle
 	using Payment = Common.Payment;
 	public class ExpensesView : DialogViewController
 	{
+		public override string Title {
+			get { return Locale.GetText ("Expenses"); }
+			set { }
+		}
+
 		public ExpensesView () : base (UITableViewStyle.Grouped, null)
 		{
 			var payments = GetDummyPayments ();
 			var expenses = GetDummyExpenses ();
 
-			Root = new RootElement (Locale.GetText ("Expenses"));
+			Root = new RootElement (Title);
 
 			foreach (var payment in payments) {
 				Root.Add (new Section () { new PaymentElement (payment) } );
