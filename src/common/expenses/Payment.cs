@@ -8,18 +8,18 @@ namespace Snuggle.Common
 		public Profile From { get; set; }
 		public Profile To { get; set; }
 		public float Amount { get; set; }
-		public string CurrencyCode { get; set; }
-		public DateTime Time { get; set; }
+		public string Currency { get; set; }
+		public DateTime Date { get; set; }
 
 		public readonly List<Expense> Expenses = new List<Expense> ();
 
-		public Payment (Profile from, Profile to, float amount, string currencyCode, DateTime time)
+		public Payment (Profile from, Profile to, float amount, string currencyCode, DateTime date)
 		{
 			From = from;
 			To = to;
 			Amount = amount;
-			CurrencyCode = currencyCode;
-			Time = time;
+			Currency = currencyCode;
+			Date = date;
 		}
 	}
 }

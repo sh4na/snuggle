@@ -6,8 +6,7 @@ using MonoTouch.Dialog;
 namespace Snuggle
 {
 	using Locale = Common.Utils.Locale;
-	using Expense = Common.Expense;
-	using Payment = Common.Payment;
+	using Common;
 	public class ExpensesView : DialogViewController
 	{
 		public override string Title {
@@ -37,19 +36,19 @@ namespace Snuggle
 		{
 			List<Payment> payments = new List<Payment> ();
 			for (int n = 0; n < 2; n++) {
-				var payment = new Payment (Common.Profile.Current, Common.Profile.Current, 200f, "DKK", DateTime.Now);
-				payment.Expenses.AddRange (GetDummyExpenses ());
+				var payment = new Payment (Profile.Current, Profile.Current, 200f, "DKK", DateTime.Now);
+				payment.Expenses.AddRange (GetDummyExpenses (ExpenseStatus.Paid));
 				payments.Add (payment);
 			}
 
 			return payments;
 		}
 
-		private IEnumerable<Expense> GetDummyExpenses ()
+		private IEnumerable<Expense> GetDummyExpenses (ExpenseStatus status = ExpenseStatus.Pending)
 		{
 			List<Expense> expenses = new List<Expense> ();
 			for (int n = 0; n < 10; n++) {
-				expenses.Add (new Expense(Common.Profile.Current, 1000f, 500f, "DKK", DateTime.Now, "Expense " + n, "Food", Common.ExpenseStatus.Pending));
+				expenses.Add (new Expense(Common.Profile.Current, 1000f, 500f, "DKK", DateTime.Now, "Expense " + n, "Food", status));
 			}
 
 			return expenses;
