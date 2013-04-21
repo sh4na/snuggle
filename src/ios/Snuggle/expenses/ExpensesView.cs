@@ -32,7 +32,7 @@ namespace Snuggle
 		{
 			List<Payment> payments = new List<Payment> ();
 			for (int n = 0; n < 2; n++) {
-				var payment = new Payment (Common.Profile.Current, Common.Profile.Current, 200f, "da-DK", DateTime.Now);
+				var payment = new Payment (Common.Profile.Current, Common.Profile.Current, 200f, "DKK", DateTime.Now);
 				payment.Expenses.AddRange (GetDummyExpenses ());
 				payments.Add (payment);
 			}
@@ -44,7 +44,7 @@ namespace Snuggle
 		{
 			List<Expense> expenses = new List<Expense> ();
 			for (int n = 0; n < 10; n++) {
-				expenses.Add (new Expense(Common.Profile.Current, 1000f, "da-DK", DateTime.Now, "Expense " + n, "Food", Common.ExpenseStatus.Pending));
+				expenses.Add (new Expense(Common.Profile.Current, 1000f, 500f, "DKK", DateTime.Now, "Expense " + n, "Food", Common.ExpenseStatus.Pending));
 			}
 
 			return expenses;

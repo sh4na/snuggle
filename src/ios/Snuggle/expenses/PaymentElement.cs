@@ -20,8 +20,7 @@ namespace Snuggle
 				new StringElement ("From", this.payment.From.Name),
 				new StringElement ("To", this.payment.To.Name),
 				new StringElement ("Date", this.payment.Time.ToLongDateString ()),
-				new StringElement ("Amount", this.payment.Amount.ToString("C2", CultureInfo.CreateSpecificCulture (this.payment.CurrencyCode))),
-				new StringElement ("Currency", this.payment.CurrencyCode)
+				new StringElement ("Amount", this.payment.CurrencyCode + " " + this.payment.Amount.ToString("N2", CultureInfo.CurrentUICulture))
 			});
 
 			var expensesSection = new Section ("Expenses");
@@ -43,7 +42,7 @@ namespace Snuggle
 			cell.Accessory = UITableViewCellAccessory.None;
 			cell.TextLabel.Text = this.payment.Time.ToShortDateString ();
 			cell.TextLabel.TextAlignment = UITextAlignment.Left;
-			cell.DetailTextLabel.Text = this.payment.Amount.ToString ("C2", CultureInfo.CreateSpecificCulture (this.payment.CurrencyCode));
+			cell.DetailTextLabel.Text = this.payment.CurrencyCode + " " + this.payment.Amount.ToString ("N2", CultureInfo.CurrentUICulture);
 			return cell;
 		}
 	}
